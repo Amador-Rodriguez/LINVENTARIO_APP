@@ -14,16 +14,12 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         replaceFragment(HomeFragment())
+        binding.bottomNavigationView.selectedItemId = R.id.home
         binding.bottomNavigationView.setOnItemSelectedListener{
             when(it.itemId){
                 R.id.home->replaceFragment(HomeFragment())
                 R.id.inventory->replaceFragment(InventoryFragment())
                 R.id.transactions->replaceFragment(TransactionsFragment())
-
-                else->{
-
-                }
-
             }
             true
 
