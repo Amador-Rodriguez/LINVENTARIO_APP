@@ -2,8 +2,10 @@ package com.example.linventario;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Point;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -73,6 +75,23 @@ public class SQLiteManager extends SQLiteOpenHelper {
         contentValues.put(DATE_FIELD, getStringFromDate(producto.getFecha_ingreso()));
 
         sqLiteDatabase.insert(TABLE_NAME, null, contentValues);
+    }
+
+    public void populateProductsList(){
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+
+        try (Cursor result = sqLiteDatabase.rawQuery("SELECT * FROM " + TABLE_NAME, null)) {
+            if(result.getCount() != 0){
+                while(result.moveToNext()){
+                    int id = result.getInt(1);
+                    String nombre = result.getString(2);
+                    int cantidad = result.getInt(3);
+                    Date fechaIngreso = getDateFromString(result.getString(4));
+                    Producto producto = new Producto(id, nombre, cantidad, fechaIngreso);
+                    Producto.productoArrayList.add(producto);
+                }
+            }
+        }
     }
 
     private String getStringFromDate(Date fecha_ingreso){

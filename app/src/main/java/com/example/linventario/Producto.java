@@ -1,7 +1,9 @@
 package com.example.linventario;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Producto {
+    public static ArrayList<Producto> productoArrayList = new ArrayList<>();
     private int id;
     private String nombre_producto;
     private int cantidad;
