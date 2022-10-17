@@ -3,10 +3,15 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/arb_c/AndroidStudioProjects/LINVENTARIO/app/src/main/res/drawable/bottom_navigation_selector.xml" value="0.2115" />
         <entry key="..\:/Users/arb_c/AndroidStudioProjects/LINVENTARIO/app/src/main/res/drawable/field_header.xml" value="0.2115" />
         <entry key="..\:/Users/arb_c/AndroidStudioProjects/LINVENTARIO/app/src/main/res/drawable/header_home.xml" value="0.2115" />
-        <entry key="..\:/Users/arb_c/AndroidStudioProjects/LINVENTARIO/app/src/main/res/layout/activity_main.xml" value="0.22" />
-        <entry key="..\:/Users/arb_c/AndroidStudioProjects/LINVENTARIO/app/src/main/res/layout/fragment_home.xml" value="0.25" />
+        <entry key="..\:/Users/arb_c/AndroidStudioProjects/LINVENTARIO/app/src/main/res/drawable/ic_add.xml" value="0.2115" />
+        <entry key="..\:/Users/arb_c/AndroidStudioProjects/LINVENTARIO/app/src/main/res/drawable/inputtext.xml" value="0.196" />
+        <entry key="..\:/Users/arb_c/AndroidStudioProjects/LINVENTARIO/app/src/main/res/drawable/topbar.xml" value="0.2115" />
+        <entry key="..\:/Users/arb_c/AndroidStudioProjects/LINVENTARIO/app/src/main/res/layout/activity_main.xml" value="0.33" />
+        <entry key="..\:/Users/arb_c/AndroidStudioProjects/LINVENTARIO/app/src/main/res/layout/activity_new_product.xml" value="0.1" />
+        <entry key="..\:/Users/arb_c/AndroidStudioProjects/LINVENTARIO/app/src/main/res/layout/fragment_home.xml" value="0.33" />
         <entry key="..\:/Users/arb_c/AndroidStudioProjects/LINVENTARIO/app/src/main/res/layout/fragment_inventory.xml" value="0.16" />
         <entry key="..\:/Users/arb_c/AndroidStudioProjects/LINVENTARIO/app/src/main/res/layout/fragment_transactions.xml" value="0.18" />
         <entry key="..\:/Users/arb_c/AndroidStudioProjects/LINVENTARIO/app/src/main/res/menu/bottom_nav.xml" value="0.20416666666666666" />

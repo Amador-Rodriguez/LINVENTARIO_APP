@@ -3,11 +3,17 @@
 
     <item android:title="Transactions"
         android:id="@+id/transactions"
-        android:icon="@drawable/ic_transaction"/>
+        android:icon="@drawable/ic_transaction"
+        android:iconTint="@color/black"
+        android:color="@color/white" android:state_pressed="true"
+        />
     <item android:title="Home"
         android:id="@+id/home"
-        android:icon="@drawable/ic_home"/>
+        android:icon="@drawable/ic_home"
+        android:iconTint="@color/black"/>
     <item android:title="Inventory"
         android:id="@+id/inventory"
-        android:icon="@drawable/ic_inventory"/>
+        android:icon="@drawable/ic_inventory"
+        android:iconTint="@color/black"/>
+
 </menu>
