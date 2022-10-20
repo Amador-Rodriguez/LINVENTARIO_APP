@@ -48,9 +48,7 @@ class NewProductActivity : AppCompatActivity() {
             Producto.productoArrayList.add(producto)
             Producto.productoArrayList
             sqLiteManager.addProducto(producto)
-
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+            finish()
         }
     }
 

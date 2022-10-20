@@ -29,7 +29,6 @@ class InventoryFragment : Fragment()/*, InventoryAdapter.OnNoteListener*/ {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-    val adaptador = InventoryAdapter(Producto.productoArrayList)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,7 +52,7 @@ class InventoryFragment : Fragment()/*, InventoryAdapter.OnNoteListener*/ {
             startActivity(intent)
         }
 
-
+        val adaptador = InventoryAdapter(Producto.productoArrayList)
         if(Producto.productoArrayList.isNotEmpty()) {
             bind.rvListaProductos.adapter = adaptador
             var contador = 0
