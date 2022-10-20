@@ -21,11 +21,14 @@
         </SearchView>
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_ListaProductos"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_gravity="end"
             android:layout_weight="0.9"
-            android:background="@color/blueLight_linventario">
+            android:background="@color/blueLight_linventario"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/custom_item_producto">
 
 
         </androidx.recyclerview.widget.RecyclerView>

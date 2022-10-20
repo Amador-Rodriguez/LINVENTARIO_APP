@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.Toast
 import com.example.linventario.databinding.ActivityMainBinding
 import com.example.linventario.databinding.FragmentInventoryBinding
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -18,25 +19,35 @@ import kotlinx.android.synthetic.main.fragment_inventory.*
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
+
 /**
  * A simple [Fragment] subclass.
  * Use the [InventoryFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class InventoryFragment : Fragment() {
+class InventoryFragment : Fragment()/*, InventoryAdapter.OnNoteListener*/ {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    val adaptador = InventoryAdapter(Producto.productoArrayList)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
 
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
 
-
+        if(Producto.productoArrayList.isNotEmpty()) {
+            //rv_ListaProductos.adapter = adaptador
+            var contador = 0
+            for (i in Producto.productoArrayList.iterator()){
+                contador++
+            }
+            Toast.makeText(requireActivity(), contador.toString(), Toast.LENGTH_SHORT).show()
+        }
 
     }
 
@@ -74,4 +85,8 @@ class InventoryFragment : Fragment() {
                 }
             }
     }
+
+    /*override fun onNoteClick(position: Int) {
+        TODO("Not yet implemented")
+    }*/
 }

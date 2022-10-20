@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="50dp"
+    android:layout_marginRight="50dp"
+    android:layout_marginTop="25dp"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/contenedorProducto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/yellow_linventario"
+        android:orientation="vertical"
+        android:padding="15dp">
+
+        <TextView
+            android:id="@+id/txt_cantidad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            tools:text="50" />
+
+        <TextView
+            android:id="@+id/txt_nombreProducto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:paddingBottom="10dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="#000000"
+            tools:text="Cargador Tipo C" />
+
+        <TextView
+            android:id="@+id/txt_fecha"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#AAAAAA"
+            tools:text="24/06/2021" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Observaciones:" />
+
+        <TextView
+            android:id="@+id/txt_Descripcion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Cargador con entrada tipo USB y salida de Tipo C para la mayoria de todos los dispositivos que requieran carga" />
+    </LinearLayout>
+</FrameLayout>

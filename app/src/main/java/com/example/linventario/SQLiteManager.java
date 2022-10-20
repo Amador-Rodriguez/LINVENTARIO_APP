@@ -19,10 +19,13 @@ public class SQLiteManager extends SQLiteOpenHelper {
     private static final String TABLE_NAME = "Productos";
     private static final String COUNTER = "counter";
 
-    private static final String ID_FIELD = "id";
+    private static final String ID_FIELD = "codigo";
+    private static final String CANTIDAD = "cantidad";
     private static final String NAME_FIELD = "nombre_producto";
-    private static final String QUANTITY_FIELD = "cantidad";
-    private static final String DATE_FIELD = "fecha_ingreso";
+    private static final String PRECIO_VENTA = "precioVenta";
+    private static final String PRECIO_COMPRA = "precioCompra";
+    private static final String DESCRIPCION = "descripcion";
+    private static final String EXPIRATION_DATE = "fecha_expiracion";
 
     private static final DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
 
@@ -43,19 +46,23 @@ public class SQLiteManager extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         StringBuilder sql;
         sql = new StringBuilder()
-                .append("CREATE TABLE")
+                .append("CREATE TABLE ")
                 .append(TABLE_NAME)
                 .append("(")
-                .append(COUNTER)
-                .append(" INTEGER PRIMARY KEY AUTOINCREMENT, ")
                 .append(ID_FIELD)
+                .append(" INT, ")
+                .append(CANTIDAD)
                 .append(" INT, ")
                 .append(NAME_FIELD)
                 .append(" TEXT, ")
-                .append(QUANTITY_FIELD)
-                .append(" INT, ")
-                .append(DATE_FIELD)
-                .append(" TEXT, ");
+                .append(PRECIO_VENTA)
+                .append(" FLOAT, ")
+                .append(PRECIO_COMPRA)
+                .append(" FLOAT, ")
+                .append(DESCRIPCION)
+                .append(" TEXT, ")
+                .append(EXPIRATION_DATE)
+                .append(" TEXT)");
 
         sqLiteDatabase.execSQL(sql.toString());
     }
@@ -69,10 +76,13 @@ public class SQLiteManager extends SQLiteOpenHelper {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(ID_FIELD, producto.getId());
+        contentValues.put(ID_FIELD, producto.getCodigo());
+        contentValues.put(CANTIDAD, producto.getCantidad());
         contentValues.put(NAME_FIELD, producto.getNombre_producto());
-        contentValues.put(QUANTITY_FIELD, producto.getCantidad());
-        contentValues.put(DATE_FIELD, getStringFromDate(producto.getFecha_ingreso()));
+        contentValues.put(PRECIO_VENTA, producto.getPrecioVenta());
+        contentValues.put(PRECIO_COMPRA, producto.getPrecioCompra());
+        contentValues.put(DESCRIPCION, producto.getDescripcion());
+        contentValues.put(EXPIRATION_DATE, getStringFromDate(producto.getFecha_expiracion()));
 
         sqLiteDatabase.insert(TABLE_NAME, null, contentValues);
     }
@@ -83,11 +93,14 @@ public class SQLiteManager extends SQLiteOpenHelper {
         try (Cursor result = sqLiteDatabase.rawQuery("SELECT * FROM " + TABLE_NAME, null)) {
             if(result.getCount() != 0){
                 while(result.moveToNext()){
-                    int id = result.getInt(1);
+                    int id = result.getInt(0);
+                    int cantidad = result.getInt(1);
                     String nombre = result.getString(2);
-                    int cantidad = result.getInt(3);
-                    Date fechaIngreso = getDateFromString(result.getString(4));
-                    Producto producto = new Producto(id, nombre, cantidad, fechaIngreso);
+                    float precioVenta = result.getInt(3);
+                    float precioCompra = result.getInt(4);
+                    String descripcion = result.getString(5);
+                    Date fechaExpiracion = getDateFromString(result.getString(6));
+                    Producto producto = new Producto(id, cantidad, nombre, precioVenta, precioCompra, descripcion, fechaExpiracion);
                     Producto.productoArrayList.add(producto);
                 }
             }

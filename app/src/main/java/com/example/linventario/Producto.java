@@ -4,32 +4,33 @@ import java.util.Date;
 
 public class Producto {
     public static ArrayList<Producto> productoArrayList = new ArrayList<>();
-    private int id;
-    private String nombre_producto;
+    private int codigo;
     private int cantidad;
-    private Date fecha_ingreso;
+    private String nombre_producto;
+    private float precioVenta;
+    private float precioCompra;
+    private String descripcion;
+    private Date fecha_expiracion;
 
-    public Producto(int id, String nombre_producto, int cantidad, Date fecha_ingreso) {
-        this.id = id;
-        this.nombre_producto = nombre_producto;
+    //Con fecha de expiracion
+    public Producto(int codigo, int cantidad, String nombre_producto, float precioVenta, float precioCompra, String descripcion, Date FechaExpiracion) {
+        this.codigo = codigo;
         this.cantidad = cantidad;
-        this.fecha_ingreso = fecha_ingreso;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getNombre_producto() {
-        return nombre_producto;
-    }
-
-    public void setNombre_producto(String nombre_producto) {
         this.nombre_producto = nombre_producto;
+        this.precioVenta = precioVenta;
+        this.precioCompra = precioCompra;
+        this.descripcion = descripcion;
+        this.fecha_expiracion = FechaExpiracion;
+    }
+
+    //Sin fecha de expiracion
+    public Producto(int codigo, int cantidad, String nombre_producto, float precioVenta, float precioCompra, String descripcion) {
+        this.codigo = codigo;
+        this.cantidad = cantidad;
+        this.nombre_producto = nombre_producto;
+        this.precioVenta = precioVenta;
+        this.precioCompra = precioCompra;
+        this.descripcion = descripcion;
     }
 
     public int getCantidad() {
@@ -40,11 +41,51 @@ public class Producto {
         this.cantidad = cantidad;
     }
 
-    public Date getFecha_ingreso() {
-        return fecha_ingreso;
+    public int getCodigo() {
+        return codigo;
     }
 
-    public void setFecha_ingreso(Date fecha_ingreso) {
-        this.fecha_ingreso = fecha_ingreso;
+    public void setCodigo(int codigo) {
+        this.codigo = codigo;
+    }
+
+    public String getNombre_producto() {
+        return nombre_producto;
+    }
+
+    public void setNombre_producto(String nombre_producto) {
+        this.nombre_producto = nombre_producto;
+    }
+
+    public float getPrecioVenta() {
+        return precioVenta;
+    }
+
+    public void setPrecioVenta(float precioVenta) {
+        this.precioVenta = precioVenta;
+    }
+
+    public float getPrecioCompra() {
+        return precioCompra;
+    }
+
+    public void setPrecioCompra(float precioCompra) {
+        this.precioCompra = precioCompra;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public Date getFecha_expiracion() {
+        return fecha_expiracion;
+    }
+
+    public void setFecha_expiracion(Date fecha_expiracion) {
+        this.fecha_expiracion = fecha_expiracion;
     }
 }
