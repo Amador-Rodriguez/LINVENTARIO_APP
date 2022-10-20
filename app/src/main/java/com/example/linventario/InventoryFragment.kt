@@ -40,15 +40,6 @@ class InventoryFragment : Fragment()/*, InventoryAdapter.OnNoteListener*/ {
             param2 = it.getString(ARG_PARAM2)
         }
 
-        if(Producto.productoArrayList.isNotEmpty()) {
-            //rv_ListaProductos.adapter = adaptador
-            var contador = 0
-            for (i in Producto.productoArrayList.iterator()){
-                contador++
-            }
-            Toast.makeText(requireActivity(), contador.toString(), Toast.LENGTH_SHORT).show()
-        }
-
     }
 
     override fun onCreateView(
@@ -60,6 +51,15 @@ class InventoryFragment : Fragment()/*, InventoryAdapter.OnNoteListener*/ {
         bind.btnNew.setOnClickListener{
             val intent = Intent (activity, NewProductActivity::class.java)
             startActivity(intent)
+        }
+
+
+        if(Producto.productoArrayList.isNotEmpty()) {
+            bind.rvListaProductos.adapter = adaptador
+            var contador = 0
+            for (i in Producto.productoArrayList.iterator()){
+                contador++
+            }
         }
 
         // Inflate the layout for this fragment
