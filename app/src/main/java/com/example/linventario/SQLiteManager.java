@@ -89,7 +89,6 @@ public class SQLiteManager extends SQLiteOpenHelper {
 
     public void populateProductsList(){
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
-
         try (Cursor result = sqLiteDatabase.rawQuery("SELECT * FROM " + TABLE_NAME, null)) {
             if(result.getCount() != 0){
                 while(result.moveToNext()){
@@ -114,7 +113,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
         return dateFormat.format(fecha_ingreso);
     }
 
-    private Date getDateFromString(String string){
+    public Date getDateFromString(String string){
         try {
             return dateFormat.parse(string);
         } catch (ParseException | NullPointerException e) {

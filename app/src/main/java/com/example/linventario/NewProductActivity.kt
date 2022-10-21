@@ -9,6 +9,8 @@ import kotlinx.android.synthetic.main.activity_new_product.*
 import java.text.DateFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 class NewProductActivity : AppCompatActivity() {
@@ -39,11 +41,13 @@ class NewProductActivity : AppCompatActivity() {
             val precioVenta = tb_precioVenta.text.toString()
             val precioCompra = tb_precioCompra.text.toString()
             val descripcion = tb_descripcion.text.toString()
-            val fecha = getDateFromString("02-20-2023 10:00:00")
+            val formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm:ss")
+            val current = LocalDateTime.now().format(formatter)
+            //TODO: SABER SI DE VERDAD VAMOS A USAR EL CAMPO DE QUE SI EXPIRA O NO
 
             var producto = Producto(
                 codigo.toInt(), 15, nombreProducto, precioVenta.toFloat(),
-                precioCompra.toFloat(), descripcion, fecha)
+                precioCompra.toFloat(), descripcion, sqLiteManager.getDateFromString(current))
 
             Producto.productoArrayList.add(producto)
             Producto.productoArrayList
@@ -56,18 +60,6 @@ class NewProductActivity : AppCompatActivity() {
         val format = "dd-MM-yyyy"
         val sdf = SimpleDateFormat(format, Locale.UK)
         btnDatePicker.setText(sdf.format(calendar.time))
-    }
-
-    private fun getDateFromString(string: String): Date? {
-        val dateFormat: DateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
-
-        return try {
-            dateFormat.parse(string)
-        } catch (e: ParseException) {
-            null
-        } catch (e: NullPointerException) {
-            null
-        }
     }
 
 }

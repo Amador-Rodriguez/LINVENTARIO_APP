@@ -1,8 +1,7 @@
 package com.example.linventario
 
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.linventario.databinding.ActivityMainBinding
 

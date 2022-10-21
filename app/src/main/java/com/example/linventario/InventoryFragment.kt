@@ -25,14 +25,14 @@ private const val ARG_PARAM2 = "param2"
  * Use the [InventoryFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class InventoryFragment : Fragment()/*, InventoryAdapter.OnNoteListener*/ {
+class InventoryFragment : Fragment(), InventoryAdapter.OnNoteListener {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
 
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
@@ -52,13 +52,9 @@ class InventoryFragment : Fragment()/*, InventoryAdapter.OnNoteListener*/ {
             startActivity(intent)
         }
 
-        val adaptador = InventoryAdapter(Producto.productoArrayList)
+        val adaptador = InventoryAdapter(Producto.productoArrayList, this)
         if(Producto.productoArrayList.isNotEmpty()) {
             bind.rvListaProductos.adapter = adaptador
-            var contador = 0
-            for (i in Producto.productoArrayList.iterator()){
-                contador++
-            }
         }
 
         // Inflate the layout for this fragment
@@ -85,7 +81,9 @@ class InventoryFragment : Fragment()/*, InventoryAdapter.OnNoteListener*/ {
             }
     }
 
-    /*override fun onNoteClick(position: Int) {
-        TODO("Not yet implemented")
-    }*/
+    override fun onNoteClick(position: Int) {
+        var aux = position
+        aux++
+        Toast.makeText(activity, aux.toString(), Toast.LENGTH_SHORT).show()
+    }
 }
