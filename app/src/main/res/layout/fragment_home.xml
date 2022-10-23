@@ -38,7 +38,7 @@
 
                 android:layout_marginStart="16dp"
                 android:layout_weight="1"
-                android:background="@drawable/field_header"
+                android:background="@drawable/shape_white"
 
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/fieldB"
@@ -82,7 +82,7 @@
 
                 android:layout_marginEnd="16dp"
                 android:layout_weight="1"
-                android:background="@drawable/field_header"
+                android:background="@drawable/shape_white"
 
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
