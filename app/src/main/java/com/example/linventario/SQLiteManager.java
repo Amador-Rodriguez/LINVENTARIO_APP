@@ -87,7 +87,17 @@ public class SQLiteManager extends SQLiteOpenHelper {
         sqLiteDatabase.insert(TABLE_NAME, null, contentValues);
     }
 
+    public void deleteProducto(Integer position){
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+        Producto toDelete = Producto.productoArrayList.get(position);
+
+        sqLiteDatabase.execSQL("DELETE FROM Productos WHERE codigo = " + toDelete.getCodigo());
+        populateProductsList();
+
+    }
+
     public void populateProductsList(){
+        Producto.productoArrayList.clear();
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
         try (Cursor result = sqLiteDatabase.rawQuery("SELECT * FROM " + TABLE_NAME, null)) {
             if(result.getCount() != 0){

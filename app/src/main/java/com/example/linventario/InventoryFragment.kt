@@ -2,22 +2,19 @@ package com.example.linventario
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.Toast
-import com.example.linventario.databinding.ActivityMainBinding
+import androidx.fragment.app.Fragment
 import com.example.linventario.databinding.FragmentInventoryBinding
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import kotlinx.android.synthetic.*
-import kotlinx.android.synthetic.main.fragment_inventory.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
+private const val MENSAJE_SELECCION = "Seleccione el elemento que quiere "
+private lateinit var adapterGlobal: InventoryAdapter
 
 
 /**
@@ -25,10 +22,11 @@ private const val ARG_PARAM2 = "param2"
  * Use the [InventoryFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class InventoryFragment : Fragment(), InventoryAdapter.OnNoteListener {
+class InventoryFragment : Fragment(), InventoryAdapter.OnProductListener {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    private var action = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,16 +43,26 @@ class InventoryFragment : Fragment(), InventoryAdapter.OnNoteListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         val bind = FragmentInventoryBinding.inflate(layoutInflater)
-        bind.btnNew.setOnClickListener{
-            val intent = Intent (activity, NewProductActivity::class.java)
-            startActivity(intent)
-        }
 
         val adaptador = InventoryAdapter(Producto.productoArrayList, this)
+        adapterGlobal = adaptador
         if(Producto.productoArrayList.isNotEmpty()) {
             bind.rvListaProductos.adapter = adaptador
+        }
+
+        bind.btnNew.setOnClickListener{
+            val intent = Intent (activity, NewProductActivity::class.java)
+            intent.putExtra("fromEdit", false)
+            startActivity(intent)
+        }
+        bind.btnDelete.setOnClickListener{
+            Toast.makeText(activity, MENSAJE_SELECCION + "eliminar", Toast.LENGTH_SHORT).show()
+            action = 1
+        }
+        bind.btnEdit.setOnClickListener{
+            Toast.makeText(activity, MENSAJE_SELECCION + "editar", Toast.LENGTH_SHORT).show()
+            action = 2
         }
 
         // Inflate the layout for this fragment
@@ -81,9 +89,19 @@ class InventoryFragment : Fragment(), InventoryAdapter.OnNoteListener {
             }
     }
 
-    override fun onNoteClick(position: Int) {
-        var aux = position
-        aux++
-        Toast.makeText(activity, aux.toString(), Toast.LENGTH_SHORT).show()
+    override fun onProductClick(position: Int) {
+        val sqLiteManager = SQLiteManager.instanceOfDatabase(activity);
+
+        //Eliminar
+        if (action == 1){
+            sqLiteManager.deleteProducto(position)
+            adapterGlobal.update(Producto.productoArrayList)
+        }
+        //Editar
+        if (action == 2){
+            val intent = Intent(activity, NewProductActivity::class.java)
+            intent.putExtra("position", position)
+        }
+        action = 0
     }
 }

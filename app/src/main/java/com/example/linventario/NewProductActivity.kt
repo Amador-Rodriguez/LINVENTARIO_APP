@@ -20,6 +20,12 @@ class NewProductActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        var productoEdit = intent.getIntExtra("position", -1)
+
+        if (productoEdit != -1){
+
+        }
+
         setContentView(R.layout.activity_new_product)
         btnDatePicker = findViewById(R.id.dtp_fechaExpira)
         btnGuardar = findViewById(R.id.btn_saveNewProduct)
@@ -52,7 +58,9 @@ class NewProductActivity : AppCompatActivity() {
             Producto.productoArrayList.add(producto)
             Producto.productoArrayList
             sqLiteManager.addProducto(producto)
-            finish()
+            val intent = Intent (this, MainActivity::class.java)
+            intent.putExtra("fromNew", true)
+            startActivity(intent)
         }
     }
 

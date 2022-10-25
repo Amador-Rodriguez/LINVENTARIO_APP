@@ -10,21 +10,13 @@
         <entry key="..\:/Users/arb_c/AndroidStudioProjects/LINVENTARIO/app/src/main/res/layout/fragment_inventory.xml" value="0.16" />
         <entry key="..\:/Users/arb_c/AndroidStudioProjects/LINVENTARIO/app/src/main/res/layout/fragment_transactions.xml" value="0.18" />
         <entry key="..\:/Users/arb_c/AndroidStudioProjects/LINVENTARIO/app/src/main/res/menu/bottom_nav.xml" value="0.20416666666666666" />
-        <entry key="..\:/Users/mayin/Documents/GitHub/LINVENTARIO_APP/app/src/main/res/drawable/bottom_navigation_selector.xml" value="0.239" />
-        <entry key="..\:/Users/mayin/Documents/GitHub/LINVENTARIO_APP/app/src/main/res/drawable/field_header.xml" value="0.239" />
-        <entry key="..\:/Users/mayin/Documents/GitHub/LINVENTARIO_APP/app/src/main/res/drawable/shape_white2.xml" value="0.239" />
-        <entry key="..\:/Users/mayin/Documents/GitHub/LINVENTARIO_APP/app/src/main/res/layout/activity_login_activty.xml" value="0.33" />
-        <entry key="..\:/Users/mayin/Documents/GitHub/LINVENTARIO_APP/app/src/main/res/layout/activity_main.xml" value="0.25" />
-        <entry key="..\:/Users/mayin/Documents/GitHub/LINVENTARIO_APP/app/src/main/res/layout/activity_new_product.xml" value="0.5" />
-        <entry key="..\:/Users/mayin/Documents/GitHub/LINVENTARIO_APP/app/src/main/res/layout/activity_new_transaction.xml" value="0.3770491803278688" />
-        <entry key="..\:/Users/mayin/Documents/GitHub/LINVENTARIO_APP/app/src/main/res/layout/fragment_home.xml" value="0.2513586956521739" />
-        <entry key="..\:/Users/mayin/Documents/GitHub/LINVENTARIO_APP/app/src/main/res/layout/fragment_inventory.xml" value="0.2513586956521739" />
-        <entry key="..\:/Users/mayin/Documents/GitHub/LINVENTARIO_APP/app/src/main/res/layout/fragment_transactions.xml" value="0.1956521739130435" />
+        <entry key="..\:/Users/mike7/AndroidStudioProjects/LINVENTARIO_APP/app/src/main/res/layout/activity_login_activty.xml" value="0.2536231884057971" />
         <entry key="..\:/Users/mike7/AndroidStudioProjects/LINVENTARIO_APP/app/src/main/res/layout/activity_main.xml" value="0.22826086956521738" />
         <entry key="..\:/Users/mike7/AndroidStudioProjects/LINVENTARIO_APP/app/src/main/res/layout/activity_new_product.xml" value="0.2536231884057971" />
+        <entry key="..\:/Users/mike7/AndroidStudioProjects/LINVENTARIO_APP/app/src/main/res/layout/activity_new_transaction.xml" value="0.2536231884057971" />
         <entry key="..\:/Users/mike7/AndroidStudioProjects/LINVENTARIO_APP/app/src/main/res/layout/custom_item_producto.xml" value="0.6" />
         <entry key="..\:/Users/mike7/AndroidStudioProjects/LINVENTARIO_APP/app/src/main/res/layout/fragment_home.xml" value="0.22826086956521738" />
-        <entry key="..\:/Users/mike7/AndroidStudioProjects/LINVENTARIO_APP/app/src/main/res/layout/fragment_inventory.xml" value="0.22826086956521738" />
+        <entry key="..\:/Users/mike7/AndroidStudioProjects/LINVENTARIO_APP/app/src/main/res/layout/fragment_inventory.xml" value="0.2" />
         <entry key="..\:/Users/mike7/AndroidStudioProjects/LINVENTARIO_APP/app/src/main/res/layout/fragment_transactions.xml" value="0.22826086956521738" />
       </map>
     </option>

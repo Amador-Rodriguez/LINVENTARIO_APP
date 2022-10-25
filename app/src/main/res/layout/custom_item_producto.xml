@@ -51,5 +51,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:text="Cargador con entrada tipo USB y salida de Tipo C para la mayoria de todos los dispositivos que requieran carga" />
+
     </LinearLayout>
 </FrameLayout>

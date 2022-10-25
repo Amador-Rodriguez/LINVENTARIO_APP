@@ -12,10 +12,21 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val intent = getIntent()
+        var fromNew = intent.getBooleanExtra("fromNew", false)
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        replaceFragment(HomeFragment())
-        binding.bottomNavigationView.selectedItemId = R.id.home
+
+        if(fromNew) {
+            replaceFragment(InventoryFragment())
+            binding.bottomNavigationView.selectedItemId = R.id.inventory
+        }
+        else {
+            replaceFragment(HomeFragment())
+            binding.bottomNavigationView.selectedItemId = R.id.home
+        }
+
         binding.bottomNavigationView.setOnItemSelectedListener{
             when(it.itemId){
                 R.id.home->replaceFragment(HomeFragment())

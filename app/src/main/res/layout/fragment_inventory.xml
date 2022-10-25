@@ -15,8 +15,7 @@
         <SearchView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
-            >
+            android:background="@color/white">
 
         </SearchView>
 
@@ -46,4 +45,27 @@
         android:clickable="true"
         android:contentDescription="Agregar producto"
         android:src="@drawable/ic_add" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btn_Edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/white"
+        android:clickable="true"
+        android:contentDescription="Agregar producto"
+        android:src="@android:drawable/ic_menu_edit" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btn_Delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|end"
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/white"
+        android:clickable="true"
+        android:contentDescription="Agregar producto"
+        android:src="@android:drawable/ic_menu_delete" />
+
 </FrameLayout>
