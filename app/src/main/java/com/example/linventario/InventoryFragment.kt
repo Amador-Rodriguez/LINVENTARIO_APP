@@ -101,6 +101,7 @@ class InventoryFragment : Fragment(), InventoryAdapter.OnProductListener {
         if (action == 2){
             val intent = Intent(activity, NewProductActivity::class.java)
             intent.putExtra("position", position)
+            startActivity(intent)
         }
         action = 0
     }

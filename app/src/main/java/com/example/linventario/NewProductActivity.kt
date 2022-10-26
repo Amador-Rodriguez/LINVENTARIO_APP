@@ -4,6 +4,7 @@ import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_new_product.*
 import java.text.DateFormat
@@ -20,15 +21,12 @@ class NewProductActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        var productoEdit = intent.getIntExtra("position", -1)
-
-        if (productoEdit != -1){
-
-        }
+        var positionProducto = intent.getIntExtra("position", -1)
 
         setContentView(R.layout.activity_new_product)
         btnDatePicker = findViewById(R.id.dtp_fechaExpira)
         btnGuardar = findViewById(R.id.btn_saveNewProduct)
+
         var calendar = Calendar.getInstance()
         val datePicker = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
             calendar.set(Calendar.YEAR, year)
@@ -36,32 +34,48 @@ class NewProductActivity : AppCompatActivity() {
             calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
             updateLabel(calendar)
         }
+
+        if (positionProducto != -1){
+            startElements(positionProducto)
+            btnGuardar.setText("Editar")
+        }
+
         btnDatePicker.setOnClickListener{
             DatePickerDialog(this,datePicker,calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show()
         }
         btnGuardar.setOnClickListener{
             val sqLiteManager = SQLiteManager.instanceOfDatabase(this)
-            val nombreProducto = tb_nombreProducto.text.toString()
-            val codigo = tb_codigo.text.toString()
-            val precioVenta = tb_precioVenta.text.toString()
-            val precioCompra = tb_precioCompra.text.toString()
-            val descripcion = tb_descripcion.text.toString()
-            val formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm:ss")
-            val current = LocalDateTime.now().format(formatter)
-            //TODO: SABER SI DE VERDAD VAMOS A USAR EL CAMPO DE QUE SI EXPIRA O NO
+            val producto = makeProducto(sqLiteManager)
 
-            var producto = Producto(
-                codigo.toInt(), 15, nombreProducto, precioVenta.toFloat(),
-                precioCompra.toFloat(), descripcion, sqLiteManager.getDateFromString(current))
-
-            Producto.productoArrayList.add(producto)
-            Producto.productoArrayList
-            sqLiteManager.addProducto(producto)
+            if (positionProducto == -1){
+                Producto.productoArrayList.add(producto)
+                Producto.productoArrayList
+                sqLiteManager.addProducto(producto)
+            }
+            else{
+                sqLiteManager.editProducto(producto)
+            }
             val intent = Intent (this, MainActivity::class.java)
             intent.putExtra("fromNew", true)
             startActivity(intent)
         }
+    }
+
+    private fun makeProducto(sqLiteManager: SQLiteManager) : Producto{
+
+        val nombreProducto = tb_nombreProducto.text.toString()
+        val codigo = tb_codigo.text.toString()
+        val precioVenta = tb_precioVenta.text.toString()
+        val precioCompra = tb_precioCompra.text.toString()
+        val descripcion = tb_descripcion.text.toString()
+        val formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm:ss")
+        val current = LocalDateTime.now().format(formatter)
+        //TODO: SABER SI DE VERDAD VAMOS A USAR EL CAMPO DE QUE SI EXPIRA O NO
+
+        return Producto(codigo.toInt(), 15, nombreProducto, precioVenta.toFloat(),
+            precioCompra.toFloat(), descripcion, sqLiteManager.getDateFromString(current))
+
     }
 
     private fun updateLabel(calendar: Calendar){
@@ -70,4 +84,16 @@ class NewProductActivity : AppCompatActivity() {
         btnDatePicker.setText(sdf.format(calendar.time))
     }
 
+    private fun startElements(positionProducto: Int){
+        val campo_codigo: EditText = findViewById(R.id.tb_codigo)
+        campo_codigo.isEnabled = false
+
+        val productoEdit = Producto.productoArrayList[positionProducto]
+        tb_codigo.setText(productoEdit.codigo.toString())
+
+        tb_nombreProducto.setText(productoEdit.nombre_producto)
+        tb_precioCompra.setText(productoEdit.precioCompra.toString())
+        tb_precioVenta.setText(productoEdit.precioVenta.toString())
+        tb_descripcion.setText(productoEdit.descripcion)
+    }
 }
