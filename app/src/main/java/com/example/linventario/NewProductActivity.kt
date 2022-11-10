@@ -14,8 +14,9 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-class NewProductActivity : AppCompatActivity() {
 
+
+class NewProductActivity : AppCompatActivity() {
     private lateinit var btnDatePicker: Button
     private lateinit var btnGuardar: Button
 
@@ -50,11 +51,11 @@ class NewProductActivity : AppCompatActivity() {
 
             if (positionProducto == -1){
                 Producto.productoArrayList.add(producto)
-                Producto.productoArrayList
+                //Producto.productoArrayList
                 sqLiteManager.addProducto(producto)
             }
             else{
-                sqLiteManager.editProducto(producto)
+                //sqLiteManager.editProducto(producto)
             }
             val intent = Intent (this, MainActivity::class.java)
             intent.putExtra("fromNew", true)

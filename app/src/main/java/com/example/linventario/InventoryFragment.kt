@@ -15,8 +15,6 @@ private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 private const val MENSAJE_SELECCION = "Seleccione el elemento que quiere "
 private lateinit var adapterGlobal: InventoryAdapter
-
-
 /**
  * A simple [Fragment] subclass.
  * Use the [InventoryFragment.newInstance] factory method to
@@ -28,7 +26,6 @@ class InventoryFragment : Fragment(), InventoryAdapter.OnProductListener {
     private var param2: String? = null
     private var action = 0
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -36,7 +33,6 @@ class InventoryFragment : Fragment(), InventoryAdapter.OnProductListener {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
-
     }
 
     override fun onCreateView(

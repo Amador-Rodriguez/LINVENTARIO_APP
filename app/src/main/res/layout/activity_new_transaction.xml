@@ -23,54 +23,6 @@
         app:layout_constraintTop_toBottomOf="@+id/tb_descripcion2"
         app:layout_constraintVertical_bias="1.0" />
 
-    <EditText
-        android:id="@+id/tb_descripcion2"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginHorizontal="50dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/inputtext"
-        android:ems="10"
-        android:gravity="start|top"
-        android:hint="Observaciones"
-        android:inputType="textMultiLine"
-        android:padding="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.494"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tb_codigo2" />
-
-    <Button
-        android:id="@+id/btn_seleccionProducto"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="50dp"
-        android:layout_marginTop="24dp"
-        android:textAlignment="viewStart"
-        android:background="@drawable/inputtext"
-        android:textColor="@color/gray"
-        android:hint="Seleccionar producto"
-        android:padding="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.505"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dtp_fechaExpira2" />
-
-    <Button
-        android:id="@+id/dtp_fechaExpira2"
-        android:layout_width="134dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="28dp"
-        android:backgroundTint="@color/yellow_linventario"
-        android:text="DD-MM-YYYY"
-        android:background="@drawable/inputtext"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.18"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/shapeableImageView2" />
-
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/shapeableImageView2"
         android:layout_width="match_parent"
@@ -94,11 +46,28 @@
         app:layout_constraintTop_toTopOf="@+id/shapeableImageView2" />
 
     <EditText
+        android:id="@+id/tb_descripcion2"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginHorizontal="50dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/inputtext"
+        android:ems="10"
+        android:gravity="start|top"
+        android:hint="Observaciones"
+        android:inputType="textMultiLine"
+        android:padding="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.505"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tb_codigo2" />
+
+    <EditText
         android:id="@+id/tb_codigo2"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_marginHorizontal="50dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/inputtext"
         android:ems="10"
         android:hint="Cantidad"
@@ -115,37 +84,69 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="50dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="8dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_seleccionProducto">
+        app:layout_constraintTop_toBottomOf="@+id/txt_Producto">
 
         <TextView
-            android:id="@+id/textView6"
+            android:id="@+id/txt_Entrada"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
             android:layout_weight="1"
-            android:text="Entrada"
-            android:textAlignment="center"
             android:background="@drawable/shape_white2"
             android:padding="10dp"
-            android:layout_marginRight="5dp"
+            android:text="Entrada"
+            android:textAlignment="center"
 
             />
 
         <TextView
-            android:id="@+id/textView5"
+            android:id="@+id/txt_Salida"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
             android:layout_weight="1"
-            android:text="Salida"
-            android:background="@drawable/shape_white2"
-            android:textAlignment="center"
+            android:background="@drawable/shape_green"
             android:padding="10dp"
-            android:layout_marginLeft="5dp"/>
+            android:text="Salida"
+            android:textAlignment="center" />
 
     </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_Productos"
+        android:layout_width="407dp"
+        android:layout_height="334dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/shapeableImageView2"
+        tools:listitem="@layout/custom_item_producto" />
+
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="8dp"
+        android:text="Transaccion para:"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rv_Productos" />
+
+    <TextView
+        android:id="@+id/txt_Producto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@+id/textView10"
+        app:layout_constraintTop_toBottomOf="@+id/rv_Productos"
+        tools:text="Cargador tipo USB" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
