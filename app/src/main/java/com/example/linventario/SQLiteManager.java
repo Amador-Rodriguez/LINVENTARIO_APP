@@ -17,7 +17,13 @@ public class SQLiteManager extends SQLiteOpenHelper {
     private static SQLiteManager sqLiteManager;
     private static final String DATABASE_NAME = "Linventario";
     private static final String TABLE_NAME = "Productos";
+    private static final String TABLE_USUARIO = "Usuarios";
     private static final String COUNTER = "counter";
+
+    private static final String ID_USER = "id";
+    private static final String COMPANY = "nombre";
+    private static final String EMAIL = "email";
+    private static final String PASSWORD = "password";
 
     private static final String ID_FIELD = "codigo";
     private static final String CANTIDAD = "cantidad";
@@ -28,7 +34,6 @@ public class SQLiteManager extends SQLiteOpenHelper {
     private static final String EXPIRATION_DATE = "fecha_expiracion";
 
     private static final DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
-
 
     public SQLiteManager(Context context){
         super(context, DATABASE_NAME, null, 1);
@@ -45,6 +50,22 @@ public class SQLiteManager extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         StringBuilder sql;
+
+        sql = new StringBuilder()
+                .append("CREATE TABLE ")
+                .append(TABLE_USUARIO)
+                .append("(")
+                .append(ID_USER)
+                .append(" INTEGER PRIMARY KEY AUTOINCREMENT, ")
+                .append(COMPANY)
+                .append(" TEXT, ")
+                .append(EMAIL)
+                .append(" TEXT, ")
+                .append(PASSWORD)
+                .append(" TEXT)");
+
+        sqLiteDatabase.execSQL(sql.toString());
+
         sql = new StringBuilder()
                 .append("CREATE TABLE ")
                 .append(TABLE_NAME)
