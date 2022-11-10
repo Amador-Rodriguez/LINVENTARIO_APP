@@ -93,6 +93,19 @@ public class SQLiteManager extends SQLiteOpenHelper {
 
     }
 
+    public void addUser(Usuario usuario){
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(COMPANY, usuario.getName());
+        contentValues.put(EMAIL, usuario.getEmail());
+        contentValues.put(PASSWORD, usuario.getPassword());
+
+        sqLiteDatabase.insert(TABLE_USUARIO, null, contentValues);
+
+    }
+
     public void addProducto (Producto producto){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
 
