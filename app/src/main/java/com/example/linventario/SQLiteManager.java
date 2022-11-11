@@ -10,6 +10,7 @@ import android.graphics.Point;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class SQLiteManager extends SQLiteOpenHelper {
@@ -18,7 +19,6 @@ public class SQLiteManager extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "Linventario";
     private static final String TABLE_NAME = "Productos";
     private static final String TABLE_USUARIO = "Usuarios";
-    private static final String COUNTER = "counter";
 
     private static final String ID_USER = "id";
     private static final String COMPANY = "nombre";
@@ -86,6 +86,25 @@ public class SQLiteManager extends SQLiteOpenHelper {
                 .append(" TEXT)");
 
         sqLiteDatabase.execSQL(sql.toString());
+
+        sql = new StringBuilder()
+                .append("CREATE TABLE ")
+                .append("Transacciones")
+                .append("(")
+                .append("idTransaccion")
+                .append(" INT, ")
+                .append("codigoProducto")
+                .append(" INT, ")
+                .append("isEntrada")
+                .append(" BIT, ")
+                .append("cantidad")
+                .append(" INT, ")
+                .append("observaciones")
+                .append(" TEXT, ")
+                .append("fecha")
+                .append(" TEXT)");
+
+        sqLiteDatabase.execSQL(sql.toString());
     }
 
     @Override
@@ -127,7 +146,40 @@ public class SQLiteManager extends SQLiteOpenHelper {
 
         sqLiteDatabase.execSQL("DELETE FROM Productos WHERE codigo = " + toDelete.getCodigo());
         populateProductsList();
+    }
 
+    public void addTransaccion(Transaccion transaccion){
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("idTransaccion", transaccion.getIdTransaccion());
+        contentValues.put("codigoProducto", transaccion.getCodigoProducto());
+        contentValues.put("isEntrada", transaccion.isEntrada());
+        contentValues.put("cantidad", transaccion.getCantidad());
+        contentValues.put("observaciones", transaccion.getObservaciones());
+        contentValues.put("fecha", getStringFromDate(transaccion.getFecha()));
+
+        sqLiteDatabase.insert("Transacciones", null, contentValues);
+    }
+
+    public void populateTransaccionesList(){
+        Transaccion.transaccionsArrayList.clear();
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+        try(Cursor result = sqLiteDatabase.rawQuery("SELECT * FROM " + "Transacciones", null)){
+            if(result.getCount()!=0){
+                while (result.moveToNext()){
+                    int id = result.getInt(0);
+                    int codigoProducto = result.getInt(1);
+                    boolean isEntrada = result.getInt(2) > 0;
+                    int cantidad =  result.getInt(3);
+                    String observaciones = result.getString(4);
+                    Date fecha = getDateFromString(result.getString(5));
+
+                    Transaccion transaccion = new Transaccion(id, codigoProducto, isEntrada, cantidad, observaciones, fecha);
+                    Transaccion.transaccionsArrayList.add(transaccion);
+                }
+            }
+        }
     }
 
     public void populateProductsList(){

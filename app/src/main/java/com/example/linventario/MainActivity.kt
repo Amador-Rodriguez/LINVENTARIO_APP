@@ -49,6 +49,7 @@ class MainActivity : AppCompatActivity() {
     private fun loadFromDBtoMemory(){
         val sqLiteManager = SQLiteManager.instanceOfDatabase(this);
         sqLiteManager.populateProductsList()
+        sqLiteManager.populateTransaccionesList()
     }
 
 }
