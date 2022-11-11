@@ -148,6 +148,20 @@ public class SQLiteManager extends SQLiteOpenHelper {
         populateProductsList();
     }
 
+    public void editProducto(Producto producto){
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(CANTIDAD, producto.getCantidad());
+        contentValues.put(NAME_FIELD, producto.getNombre_producto());
+        contentValues.put(PRECIO_VENTA, producto.getPrecioVenta());
+        contentValues.put(PRECIO_COMPRA, producto.getPrecioCompra());
+        contentValues.put(DESCRIPCION, producto.getDescripcion());
+        contentValues.put(EXPIRATION_DATE, getStringFromDate(producto.getFecha_expiracion()));
+
+        sqLiteDatabase.update(TABLE_NAME, contentValues, "codigo = ?", new String[]{Integer.toString(producto.getCodigo())});
+    }
+
     public void addTransaccion(Transaccion transaccion){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
 
