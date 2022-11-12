@@ -44,7 +44,7 @@ class newTransactionActivity : AppCompatActivity(), InventoryAdapter.OnProductLi
                 val sqLiteManager = SQLiteManager.instanceOfDatabase(this)
                 val transaccion = makeTransaccion(sqLiteManager)
                 Transaccion.transaccionsArrayList.add(transaccion)
-                //sqLiteManager.addTransaccion(transaccion)
+                sqLiteManager.addTransaccion(transaccion)
             }
             else
                 Toast.makeText(this, "Primero eliga el producto con el que se hara la transaccion", Toast.LENGTH_SHORT).show()
