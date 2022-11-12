@@ -8,12 +8,34 @@ public class SessionManager {
     private String name;
     private String email;
 
-    private SessionManager(){};
+    private SessionManager(){}
+
     public static SessionManager getInstance(){
         if (_instance == null)
             _instance = new SessionManager();
         return _instance;
     }
 
+    public void setSession(int id, String name, String email){
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.logged = true;
+    }
 
+    public static boolean isLogged() {
+        return logged;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
 }

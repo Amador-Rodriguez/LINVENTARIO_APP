@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".LoginActivity"
-    android:background="@color/blue_linventario">
+    android:background="@color/blue_linventario"
+    >
 
 
     <Button
@@ -48,7 +49,7 @@
         app:srcCompat="@drawable/logo" />
 
     <EditText
-        android:id="@+id/editTextTextEmailAddress"
+        android:id="@+id/tb_emailLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="50dp"
@@ -57,7 +58,7 @@
         android:ems="10"
         android:hint="Correo eléctronico"
         android:inputType="textEmailAddress"
-
+        android:textColor="@color/yellow_linventario"
         android:minHeight="48dp"
         android:textColorHint="#80FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
@@ -66,7 +67,7 @@
         app:layout_constraintTop_toBottomOf="@id/imageView" />
 
     <EditText
-        android:id="@+id/editTextTextEmailAddress2"
+        android:id="@+id/tb_pwdLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="50dp"
@@ -74,14 +75,14 @@
         android:backgroundTint="@color/white"
         android:ems="10"
         android:hint="Contraseña"
-
-        android:inputType="textEmailAddress"
+        android:textColor="@color/yellow_linventario"
+        android:inputType="textPassword"
         android:minHeight="48dp"
         android:textColorHint="#80FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/editTextTextEmailAddress" />
+        app:layout_constraintTop_toBottomOf="@id/tb_emailLogin" />
 
     <TextView
         android:id="@+id/textView4"
@@ -92,5 +93,5 @@
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/editTextTextEmailAddress2" />
+        app:layout_constraintTop_toBottomOf="@id/tb_pwdLogin" />
 </androidx.constraintlayout.widget.ConstraintLayout>

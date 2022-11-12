@@ -5,12 +5,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.graphics.Point;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
 public class SQLiteManager extends SQLiteOpenHelper {
@@ -122,6 +120,33 @@ public class SQLiteManager extends SQLiteOpenHelper {
         contentValues.put(PASSWORD, usuario.getPassword());
 
         sqLiteDatabase.insert(TABLE_USUARIO, null, contentValues);
+
+    }
+
+    public boolean user_exists(String email){
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+        try(Cursor result = sqLiteDatabase.rawQuery("SELECT email FROM " + "Usuarios WHERE email = ?", new String[] {email})){
+            if(result.getCount() == 1){
+                return true;
+            }else{
+                return false;
+            }
+        }
+    }
+
+    public boolean login(String email, String pwd){
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+        try(Cursor result = sqLiteDatabase.rawQuery("SELECT id FROM " + "Usuarios WHERE email = ? AND password = ?", new String[] {email, pwd})){
+            if(result.getCount() == 1){
+                result.moveToFirst();
+                SessionManager sessionManager = SessionManager.getInstance();
+                int id = result.getInt(0);
+                sessionManager.setSession(id, email, pwd);
+                return true;
+            }else{
+                return false;
+            }
+        }
 
     }
 

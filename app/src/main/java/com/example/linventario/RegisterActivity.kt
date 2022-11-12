@@ -1,10 +1,9 @@
 package com.example.linventario
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
 import android.widget.Toast
-import com.example.linventario.databinding.ActivityMainBinding
+import androidx.appcompat.app.AppCompatActivity
 import com.example.linventario.databinding.ActivityRegisterBinding
 import kotlinx.android.synthetic.main.activity_register.*
 
@@ -12,8 +11,11 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegisterBinding
 
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
 
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -28,6 +30,12 @@ class RegisterActivity : AppCompatActivity() {
 
             if(validateForm() && validatePassword()){
                 sqLiteManager.addUser(usuario)
+                sqLiteManager.login(email, pwd)
+
+                val intent = Intent(this, MainActivity::class.java)
+                intent.putExtra("fromNew", false)
+                finish()
+                startActivity(intent)
             }
         }
     }
