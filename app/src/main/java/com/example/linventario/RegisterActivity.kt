@@ -29,13 +29,22 @@ class RegisterActivity : AppCompatActivity() {
             var usuario = Usuario(name,email,pwd)
 
             if(validateForm() && validatePassword()){
-                sqLiteManager.addUser(usuario)
-                sqLiteManager.login(email, pwd)
+                if(sqLiteManager.user_exists(email)){
+                    Toast.makeText(
+                        this@RegisterActivity,
+                        "Ese correo ya se encuentra en uso",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }else{
+                    sqLiteManager.addUser(usuario)
+                    sqLiteManager.login(email, pwd)
 
-                val intent = Intent(this, MainActivity::class.java)
-                intent.putExtra("fromNew", false)
-                finish()
-                startActivity(intent)
+                    val intent = Intent(this, MainActivity::class.java)
+                    intent.putExtra("fromNew", false)
+                    finish()
+                    startActivity(intent)
+                }
+
             }
         }
     }

@@ -126,7 +126,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
     public boolean user_exists(String email){
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
         try(Cursor result = sqLiteDatabase.rawQuery("SELECT email FROM " + "Usuarios WHERE email = ?", new String[] {email})){
-            if(result.getCount() == 1){
+            if(result.getCount() != 0){
                 return true;
             }else{
                 return false;
