@@ -1,5 +1,6 @@
 package com.example.linventario
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -8,10 +9,13 @@ import kotlinx.android.synthetic.main.activity_new_transaction.*
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
+//TODO: VALIDAR QUE HAYA SUFICIENTE PRODUCTO PARA HACER LA TRANSACCION
+
 class newTransactionActivity : AppCompatActivity(), InventoryAdapter.OnProductListener {
     private lateinit var adapterGlobal: InventoryAdapter
     private lateinit var productoT: Producto
     private var isEntrada = false
+    private var positionProducto = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,11 +44,28 @@ class newTransactionActivity : AppCompatActivity(), InventoryAdapter.OnProductLi
         }
 
         btn_saveNewProduct2.setOnClickListener {
-            if(productoT != null){
-                val sqLiteManager = SQLiteManager.instanceOfDatabase(this)
-                val transaccion = makeTransaccion(sqLiteManager)
-                Transaccion.transaccionsArrayList.add(transaccion)
-                sqLiteManager.addTransaccion(transaccion)
+            if(positionProducto != -1){
+                if(!isEntrada && productoT.cantidad >= tb_codigo2.text.toString().toInt()){
+                    val sqLiteManager = SQLiteManager.instanceOfDatabase(this)
+                    val transaccion = makeTransaccion(sqLiteManager)
+                    Transaccion.transaccionsArrayList.add(transaccion)
+                    sqLiteManager.addTransaccion(transaccion)
+                    val intent = Intent (this, MainActivity::class.java)
+                    intent.putExtra("fromTransaccion", true)
+                    startActivity(intent)
+                }
+                else
+                    Toast.makeText(this, "No hay suficientes productos como para hacer la transaccion", Toast.LENGTH_SHORT).show()
+
+                if(isEntrada){
+                    val sqLiteManager = SQLiteManager.instanceOfDatabase(this)
+                    val transaccion = makeTransaccion(sqLiteManager)
+                    Transaccion.transaccionsArrayList.add(transaccion)
+                    sqLiteManager.addTransaccion(transaccion)
+                    val intent = Intent (this, MainActivity::class.java)
+                    intent.putExtra("fromTransaccion", true)
+                    startActivity(intent)
+                }
             }
             else
                 Toast.makeText(this, "Primero eliga el producto con el que se hara la transaccion", Toast.LENGTH_SHORT).show()
@@ -61,6 +82,7 @@ class newTransactionActivity : AppCompatActivity(), InventoryAdapter.OnProductLi
     }
 
     override fun onProductClick(position: Int){
+        positionProducto = position
         productoT = Producto.productoArrayList[position]
         txt_Producto.setText(productoT.nombre_producto)
     }

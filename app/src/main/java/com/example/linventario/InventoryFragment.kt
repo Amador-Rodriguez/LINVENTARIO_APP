@@ -2,11 +2,11 @@ package com.example.linventario
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import com.example.linventario.databinding.FragmentInventoryBinding
 
 // TODO: Rename parameter arguments, choose names that match
@@ -86,7 +86,7 @@ class InventoryFragment : Fragment(), InventoryAdapter.OnProductListener {
     }
 
     override fun onProductClick(position: Int) {
-        val sqLiteManager = SQLiteManager.instanceOfDatabase(activity);
+        val sqLiteManager = SQLiteManager.instanceOfDatabase(activity)
 
         //Eliminar
         if (action == 1){
