@@ -140,6 +140,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
         sqLiteDatabase.insert(TABLE_NAME, null, contentValues);
     }
 
+    //TODO: Eliminar tambien la transaccion del producto
     public void deleteProducto(Integer position){
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
         Producto toDelete = Producto.productoArrayList.get(position);
@@ -174,6 +175,30 @@ public class SQLiteManager extends SQLiteOpenHelper {
         contentValues.put("fecha", getStringFromDate(transaccion.getFecha()));
 
         sqLiteDatabase.insert("Transacciones", null, contentValues);
+
+        int cantidadProductos = 0;
+        int nuevaCantidad = 0;
+
+        try(Cursor result = sqLiteDatabase.rawQuery("SELECT cantidad FROM Productos WHERE codigo = " + transaccion.getCodigoProducto(), null)){
+            if(result.getCount()!=0)
+                result.moveToNext();
+                cantidadProductos = result.getInt(0);
+        }
+
+        if(!transaccion.isEntrada()){
+            nuevaCantidad = cantidadProductos - transaccion.getCantidad();
+        }
+        else
+            nuevaCantidad = cantidadProductos + transaccion.getCantidad();
+
+        contentValues.clear();
+        contentValues.put(CANTIDAD, nuevaCantidad);
+        sqLiteDatabase.update(TABLE_NAME, contentValues, "codigo = ?", new String[]{Integer.toString(transaccion.getCodigoProducto())});
+    }
+
+    public void deleteTransaccion(Transaccion transaccion){
+        SQLiteDatabase  sqLiteDatabase = this.getWritableDatabase();
+        sqLiteDatabase.delete("Transacciones", "idTransaccion = " + transaccion.getIdTransaccion(), null);
     }
 
     public void populateTransaccionesList(){

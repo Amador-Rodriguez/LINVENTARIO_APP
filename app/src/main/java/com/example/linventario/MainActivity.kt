@@ -14,6 +14,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val intent = getIntent()
         var fromNew = intent.getBooleanExtra("fromNew", false)
+        var fromTransaccion = intent.getBooleanExtra("fromTransaccion", false)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -21,6 +22,10 @@ class MainActivity : AppCompatActivity() {
         if(fromNew) {
             replaceFragment(InventoryFragment())
             binding.bottomNavigationView.selectedItemId = R.id.inventory
+        }
+        else if(fromTransaccion){
+            replaceFragment(TransactionsFragment())
+            binding.bottomNavigationView.selectedItemId = R.id.transactions
         }
         else {
             replaceFragment(HomeFragment())

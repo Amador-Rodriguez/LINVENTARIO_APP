@@ -28,8 +28,6 @@
             android:background="@color/blueLight_linventario"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/custom_item_producto">
-
-
         </androidx.recyclerview.widget.RecyclerView>
 
 
