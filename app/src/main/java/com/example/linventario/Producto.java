@@ -23,16 +23,6 @@ public class Producto {
         this.fecha_expiracion = FechaExpiracion;
     }
 
-    //Sin fecha de expiracion
-    public Producto(int codigo, int cantidad, String nombre_producto, float precioVenta, float precioCompra, String descripcion) {
-        this.codigo = codigo;
-        this.cantidad = cantidad;
-        this.nombre_producto = nombre_producto;
-        this.precioVenta = precioVenta;
-        this.precioCompra = precioCompra;
-        this.descripcion = descripcion;
-    }
-
     public int getCantidad() {
         return cantidad;
     }

@@ -43,7 +43,7 @@ class TransactionsFragment : Fragment(), TransaccionAdapter.OnProductListener {
         val bind = FragmentTransactionsBinding.inflate(layoutInflater)
 
         val adaptador = TransaccionAdapter(Transaccion.transaccionsArrayList, this)
-        adapterGlobal = adaptador
+        //adapterGlobal = adaptador
 
         if(Transaccion.transaccionsArrayList.isNotEmpty())
             bind.rvListaTransacciones.adapter = adaptador

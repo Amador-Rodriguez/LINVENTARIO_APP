@@ -7,6 +7,7 @@ public class Transaccion {
     public static ArrayList<Transaccion> transaccionsArrayList = new ArrayList<>();
     private int idTransaccion;
     private int codigoProducto;
+    private int idUsuario;
     private boolean isEntrada;
     private int cantidad;
     private String observaciones;

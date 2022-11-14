@@ -24,6 +24,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
     private static final String PASSWORD = "password";
 
     private static final String ID_FIELD = "codigo";
+    private static final String ID_USUARIO_PRODUCTOS = "idUsuario";
     private static final String CANTIDAD = "cantidad";
     private static final String NAME_FIELD = "nombre_producto";
     private static final String PRECIO_VENTA = "precioVenta";
@@ -81,7 +82,9 @@ public class SQLiteManager extends SQLiteOpenHelper {
                 .append(DESCRIPCION)
                 .append(" TEXT, ")
                 .append(EXPIRATION_DATE)
-                .append(" TEXT)");
+                .append(" TEXT, ")
+                .append(ID_USUARIO_PRODUCTOS)
+                .append(" INT)");
 
         sqLiteDatabase.execSQL(sql.toString());
 
@@ -100,7 +103,9 @@ public class SQLiteManager extends SQLiteOpenHelper {
                 .append("observaciones")
                 .append(" TEXT, ")
                 .append("fecha")
-                .append(" TEXT)");
+                .append(" TEXT, ")
+                .append("idUsuario")
+                .append(" INT)");
 
         sqLiteDatabase.execSQL(sql.toString());
     }
@@ -136,18 +141,19 @@ public class SQLiteManager extends SQLiteOpenHelper {
 
     public boolean login(String email, String pwd){
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
-        try(Cursor result = sqLiteDatabase.rawQuery("SELECT id FROM " + "Usuarios WHERE email = ? AND password = ?", new String[] {email, pwd})){
+        try(Cursor result = sqLiteDatabase.rawQuery("SELECT id, nombre FROM " + "Usuarios WHERE email = ? AND password = ?", new String[] {email, pwd})){
             if(result.getCount() == 1){
                 result.moveToFirst();
                 SessionManager sessionManager = SessionManager.getInstance();
                 int id = result.getInt(0);
+                String nombreEmpresa = result.getString(1);
                 sessionManager.setSession(id, email, pwd);
+                Usuario.usuarioConectado = new Usuario(id, nombreEmpresa, email, pwd);
                 return true;
             }else{
                 return false;
             }
         }
-
     }
 
     public void addProducto (Producto producto){
@@ -155,6 +161,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(ID_FIELD, producto.getCodigo());
+        contentValues.put(ID_USUARIO_PRODUCTOS, Usuario.usuarioConectado.getIdUsuario());
         contentValues.put(CANTIDAD, producto.getCantidad());
         contentValues.put(NAME_FIELD, producto.getNombre_producto());
         contentValues.put(PRECIO_VENTA, producto.getPrecioVenta());
@@ -194,6 +201,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put("idTransaccion", transaccion.getIdTransaccion());
         contentValues.put("codigoProducto", transaccion.getCodigoProducto());
+        contentValues.put("idUsuario", Usuario.usuarioConectado.getIdUsuario());
         contentValues.put("isEntrada", transaccion.isEntrada());
         contentValues.put("cantidad", transaccion.getCantidad());
         contentValues.put("observaciones", transaccion.getObservaciones());
@@ -229,7 +237,8 @@ public class SQLiteManager extends SQLiteOpenHelper {
     public void populateTransaccionesList(){
         Transaccion.transaccionsArrayList.clear();
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
-        try(Cursor result = sqLiteDatabase.rawQuery("SELECT * FROM " + "Transacciones", null)){
+        try(Cursor result = sqLiteDatabase.rawQuery("SELECT * FROM " + "Transacciones WHERE idUsuario = " +
+                Usuario.usuarioConectado.getIdUsuario(), null)){
             if(result.getCount()!=0){
                 while (result.moveToNext()){
                     int id = result.getInt(0);
@@ -249,7 +258,8 @@ public class SQLiteManager extends SQLiteOpenHelper {
     public void populateProductsList(){
         Producto.productoArrayList.clear();
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
-        try (Cursor result = sqLiteDatabase.rawQuery("SELECT * FROM " + TABLE_NAME, null)) {
+        try (Cursor result = sqLiteDatabase.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE idUsuario = " +
+                Usuario.usuarioConectado.getIdUsuario(), null)) {
             if(result.getCount() != 0){
                 while(result.moveToNext()){
                     int id = result.getInt(0);

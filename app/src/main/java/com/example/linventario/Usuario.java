@@ -1,7 +1,8 @@
 package com.example.linventario;
 
 public class Usuario {
-
+    public static Usuario usuarioConectado;
+    private int idUsuario;
     private String name;
     private String email;
     private String password;
@@ -10,6 +11,21 @@ public class Usuario {
         this.name = name;
         this.email = email;
         this.password = password;
+    }
+
+    public Usuario(int idUsuario, String name, String email, String password) {
+        this.idUsuario = idUsuario;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
+
+    public int getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
     public String getName() {
