@@ -1,22 +1,43 @@
 package com.example.linventario;
 
+
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Queue;
 
 public class SQLiteManager extends SQLiteOpenHelper {
 
+    private Context context;
     private static SQLiteManager sqLiteManager;
     private static final String DATABASE_NAME = "Linventario";
     private static final String TABLE_NAME = "Productos";
     private static final String TABLE_USUARIO = "Usuarios";
+    private static final String TABLE_PETICIONES = "Peticiones";
 
     private static final String ID_USER = "id";
     private static final String COMPANY = "nombre";
@@ -32,6 +53,10 @@ public class SQLiteManager extends SQLiteOpenHelper {
     private static final String DESCRIPCION = "descripcion";
     private static final String EXPIRATION_DATE = "fecha_expiracion";
 
+    private static final String ID_OBJECT = "id";
+    private static final String TYPE_OBJECT = "tipo";
+
+
     private static final DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
 
     public SQLiteManager(Context context){
@@ -39,8 +64,10 @@ public class SQLiteManager extends SQLiteOpenHelper {
     }
 
     public static SQLiteManager instanceOfDatabase(Context context){
-        if(sqLiteManager == null)
+        if(sqLiteManager == null){
             sqLiteManager = new SQLiteManager(context);
+            sqLiteManager.context = context;
+        }
 
         return sqLiteManager;
 
@@ -61,6 +88,17 @@ public class SQLiteManager extends SQLiteOpenHelper {
                 .append(EMAIL)
                 .append(" TEXT, ")
                 .append(PASSWORD)
+                .append(" TEXT)");
+
+        sqLiteDatabase.execSQL(sql.toString());
+
+        sql = new StringBuilder()
+                .append("CREATE TABLE ")
+                .append(TABLE_PETICIONES)
+                .append("(")
+                .append(ID_OBJECT)
+                .append(" INT, ")
+                .append(TYPE_OBJECT)
                 .append(" TEXT)");
 
         sqLiteDatabase.execSQL(sql.toString());
@@ -115,6 +153,67 @@ public class SQLiteManager extends SQLiteOpenHelper {
 
     }
 
+
+    public static Boolean isOnlineNet() {
+
+        try {
+            Process p = java.lang.Runtime.getRuntime().exec("ping -c 1 www.google.es");
+
+            int val = p.waitFor();
+            boolean reachable = (val == 0);
+            return reachable;
+
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    private void addUserOnline(Usuario usuario) {
+        RequestQueue queue = Volley.newRequestQueue(context);
+
+        HashMap<String, String> data = new HashMap<String, String>();
+        data.put("nombre", usuario.getName());
+        data.put("correo", usuario.getEmail());
+        data.put("contrasena", usuario.getPassword());
+        data.put("v_contrasena", usuario.getPassword());
+
+        JSONObject datos_toSend = new JSONObject((Map<String, String>) data);
+
+        String url = "http://192.168.0.7:8080/PSM/register_inc.php";
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.POST, url, datos_toSend, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            String msg_server = response.getString("mensaje");
+                            int error_server = response.getInt("error");
+                            Toast.makeText(context, msg_server, Toast.LENGTH_LONG).show();
+                            if(error_server != 0){
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                    }
+                });
+
+        HttpsTrustManager.allowAllSSL();
+        queue.add(jsonObjectRequest);
+    }
+
+
+
+
     public void addUser(Usuario usuario){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
 
@@ -125,6 +224,8 @@ public class SQLiteManager extends SQLiteOpenHelper {
         contentValues.put(PASSWORD, usuario.getPassword());
 
         sqLiteDatabase.insert(TABLE_USUARIO, null, contentValues);
+
+        addUserOnline(usuario);
 
     }
 
@@ -140,6 +241,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
     }
 
     public boolean login(String email, String pwd){
+
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
         try(Cursor result = sqLiteDatabase.rawQuery("SELECT id, nombre FROM " + "Usuarios WHERE email = ? AND password = ?", new String[] {email, pwd})){
             if(result.getCount() == 1){
@@ -147,8 +249,8 @@ public class SQLiteManager extends SQLiteOpenHelper {
                 SessionManager sessionManager = SessionManager.getInstance();
                 int id = result.getInt(0);
                 String nombreEmpresa = result.getString(1);
-                sessionManager.setSession(id, email, pwd);
-                Usuario.usuarioConectado = new Usuario(id, nombreEmpresa, email, pwd);
+                sessionManager.setSession(id, nombreEmpresa, email);
+
                 return true;
             }else{
                 return false;
@@ -158,10 +260,11 @@ public class SQLiteManager extends SQLiteOpenHelper {
 
     public void addProducto (Producto producto){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        SessionManager sessionManager = SessionManager.getInstance();
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(ID_FIELD, producto.getCodigo());
-        contentValues.put(ID_USUARIO_PRODUCTOS, Usuario.usuarioConectado.getIdUsuario());
+        contentValues.put(ID_USUARIO_PRODUCTOS, sessionManager.getId());
         contentValues.put(CANTIDAD, producto.getCantidad());
         contentValues.put(NAME_FIELD, producto.getNombre_producto());
         contentValues.put(PRECIO_VENTA, producto.getPrecioVenta());
@@ -197,11 +300,11 @@ public class SQLiteManager extends SQLiteOpenHelper {
 
     public void addTransaccion(Transaccion transaccion){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
-
+        SessionManager sessionManager = SessionManager.getInstance();
         ContentValues contentValues = new ContentValues();
         contentValues.put("idTransaccion", transaccion.getIdTransaccion());
         contentValues.put("codigoProducto", transaccion.getCodigoProducto());
-        contentValues.put("idUsuario", Usuario.usuarioConectado.getIdUsuario());
+        contentValues.put("idUsuario", sessionManager.getId());
         contentValues.put("isEntrada", transaccion.isEntrada());
         contentValues.put("cantidad", transaccion.getCantidad());
         contentValues.put("observaciones", transaccion.getObservaciones());
@@ -213,9 +316,11 @@ public class SQLiteManager extends SQLiteOpenHelper {
         int nuevaCantidad = 0;
 
         try(Cursor result = sqLiteDatabase.rawQuery("SELECT cantidad FROM Productos WHERE codigo = " + transaccion.getCodigoProducto(), null)){
-            if(result.getCount()!=0)
+            if(result.getCount()!=0){
                 result.moveToNext();
                 cantidadProductos = result.getInt(0);
+            }
+
         }
 
         if(!transaccion.isEntrada()){
@@ -237,8 +342,10 @@ public class SQLiteManager extends SQLiteOpenHelper {
     public void populateTransaccionesList(){
         Transaccion.transaccionsArrayList.clear();
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+        SessionManager sessionManager = SessionManager.getInstance();
+
         try(Cursor result = sqLiteDatabase.rawQuery("SELECT * FROM " + "Transacciones WHERE idUsuario = " +
-                Usuario.usuarioConectado.getIdUsuario(), null)){
+                sessionManager.getId(), null)){
             if(result.getCount()!=0){
                 while (result.moveToNext()){
                     int id = result.getInt(0);
@@ -258,8 +365,9 @@ public class SQLiteManager extends SQLiteOpenHelper {
     public void populateProductsList(){
         Producto.productoArrayList.clear();
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+        SessionManager sessionManager = SessionManager.getInstance();
         try (Cursor result = sqLiteDatabase.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE idUsuario = " +
-                Usuario.usuarioConectado.getIdUsuario(), null)) {
+               sessionManager.getId(), null)) {
             if(result.getCount() != 0){
                 while(result.moveToNext()){
                     int id = result.getInt(0);

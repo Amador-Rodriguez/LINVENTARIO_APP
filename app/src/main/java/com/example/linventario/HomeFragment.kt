@@ -1,13 +1,11 @@
 package com.example.linventario
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.SurfaceControl
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.example.linventario.databinding.FragmentHomeBinding
-import kotlinx.android.synthetic.main.fragment_home.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -37,7 +35,9 @@ class HomeFragment : Fragment(), TransaccionAdapter.OnProductListener {
         savedInstanceState: Bundle?
     ): View? {
         val bind = FragmentHomeBinding.inflate(layoutInflater)
-        bind.txtCompanyName.text = Usuario.usuarioConectado.name
+        val sessionManager = SessionManager.getInstance()
+
+        bind.txtCompanyName.text = sessionManager.name
         var listDashboard = arrayListOf<Transaccion>()
         if (Transaccion.transaccionsArrayList.size > 5){
             for (i in 0..5){
