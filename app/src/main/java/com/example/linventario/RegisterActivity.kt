@@ -4,8 +4,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.android.volley.Request
+import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.Volley
 import com.example.linventario.databinding.ActivityRegisterBinding
 import kotlinx.android.synthetic.main.activity_register.*
+import org.json.JSONException
+import org.json.JSONObject
 
 class RegisterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegisterBinding
@@ -22,30 +27,45 @@ class RegisterActivity : AppCompatActivity() {
 
         btn_createAcount.setOnClickListener{
             val sqLiteManager = SQLiteManager.instanceOfDatabase(this)
-            var name = tb_companyname.text.toString()
-            var email = tb_email.text.toString()
-            var pwd = tb_password.text.toString()
+            val queue = Volley.newRequestQueue(this)
 
-            var usuario = Usuario(name,email,pwd)
+            val data = HashMap<String?, String?>()
+            data["nombre"] = tb_companyname.text.toString()
+            data["correo"] = tb_email.text.toString()
+            data["contrasena"] = tb_password.text.toString()
+            data["v_contrasena"] = tb_confirmpassword.text.toString()
 
-            if(validateForm() && validatePassword()){
-                if(sqLiteManager.user_exists(email)){
-                    Toast.makeText(
-                        this@RegisterActivity,
-                        "Ese correo ya se encuentra en uso",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }else{
-                    sqLiteManager.addUser(usuario)
-                    sqLiteManager.login(email, pwd)
+            val usuario = Usuario(tb_companyname.text.toString(), tb_email.text.toString(), tb_password.text.toString())
 
-                    val intent = Intent(this, MainActivity::class.java)
-                    intent.putExtra("fromNew", false)
-                    finish()
-                    startActivity(intent)
+
+            val datos_toSend = JSONObject(data as Map<String?, String?>)
+
+            val url = "http://192.168.0.7:8080/PSM/register_inc.php"
+
+            val jsonObjectRequest = JsonObjectRequest(
+                Request.Method.POST, url, datos_toSend,
+                { response ->
+                    try {
+                        val msg_server = response.getString("mensaje")
+                        val error_server = response.getInt("error")
+                        Toast.makeText(this, msg_server, Toast.LENGTH_LONG).show()
+                        if(error_server == 0){
+                            sqLiteManager.addUser(usuario)
+                            val intent = Intent(this, MainActivity::class.java)
+                            intent.putExtra("fromNew", false)
+                            finish()
+                            startActivity(intent)
+                        }
+                    } catch (e: JSONException) {
+                        e.printStackTrace()
+                    }
                 }
+            ) { error -> error.printStackTrace() }
 
-            }
+            HttpsTrustManager.allowAllSSL()
+            queue.add(jsonObjectRequest)
+
+
         }
     }
 

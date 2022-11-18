@@ -170,48 +170,6 @@ public class SQLiteManager extends SQLiteOpenHelper {
         return false;
     }
 
-    private void addUserOnline(Usuario usuario) {
-        RequestQueue queue = Volley.newRequestQueue(context);
-
-        HashMap<String, String> data = new HashMap<String, String>();
-        data.put("nombre", usuario.getName());
-        data.put("correo", usuario.getEmail());
-        data.put("contrasena", usuario.getPassword());
-        data.put("v_contrasena", usuario.getPassword());
-
-        JSONObject datos_toSend = new JSONObject((Map<String, String>) data);
-
-        String url = "http://192.168.0.7:8080/PSM/register_inc.php";
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.POST, url, datos_toSend, new Response.Listener<JSONObject>() {
-
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            String msg_server = response.getString("mensaje");
-                            int error_server = response.getInt("error");
-                            Toast.makeText(context, msg_server, Toast.LENGTH_LONG).show();
-                            if(error_server != 0){
-
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        error.printStackTrace();
-                    }
-                });
-
-        HttpsTrustManager.allowAllSSL();
-        queue.add(jsonObjectRequest);
-    }
-
-
 
 
     public void addUser(Usuario usuario){
@@ -224,8 +182,6 @@ public class SQLiteManager extends SQLiteOpenHelper {
         contentValues.put(PASSWORD, usuario.getPassword());
 
         sqLiteDatabase.insert(TABLE_USUARIO, null, contentValues);
-
-        addUserOnline(usuario);
 
     }
 

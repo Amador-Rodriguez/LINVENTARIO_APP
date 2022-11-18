@@ -22,6 +22,7 @@ class LoginActivity : AppCompatActivity() {
 
         binding = ActivityLoginActivtyBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        val sqLiteManager = SQLiteManager.instanceOfDatabase(this)
 
         btn_login.setOnClickListener{
             if(SQLiteManager.isOnlineNet()) {
@@ -64,7 +65,23 @@ class LoginActivity : AppCompatActivity() {
                 HttpsTrustManager.allowAllSSL()
                 queue.add(jsonObjectRequest)
             }else{
-                Toast.makeText(this, "Para iniciar sesión debes tener conexión a internet", Toast.LENGTH_LONG).show()
+
+                if(sqLiteManager.user_exists(tb_emailLogin.text.toString())){
+                    if(sqLiteManager.login(tb_emailLogin.text.toString(), tb_pwdLogin.text.toString())){
+                        val intent = Intent(this, MainActivity::class.java)
+                        intent.putExtra("fromNew", false)
+                        finish()
+                        startActivity(intent)
+                    }else{
+                        Toast.makeText(this, "Contraseña incorrecta", Toast.LENGTH_LONG).show()
+
+                    }
+                }else{
+                    Toast.makeText(this, "Usuario no existente de forma local, conectate a internet", Toast.LENGTH_LONG).show()
+                }
+
+
+
             }
         }
 
