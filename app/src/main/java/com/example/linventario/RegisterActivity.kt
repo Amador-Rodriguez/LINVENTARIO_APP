@@ -49,6 +49,8 @@ class RegisterActivity : AppCompatActivity() {
                     try {
                         val msg_server = response.getString("mensaje")
                         val error_server = response.getInt("error")
+                        val id_user = response.getInt("id_user")
+
                         Toast.makeText(this, msg_server, Toast.LENGTH_LONG).show()
                         if(error_server == 0){
                             sqLiteManager.addUser(usuario)
