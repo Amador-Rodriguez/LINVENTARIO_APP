@@ -8,6 +8,7 @@ import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.example.linventario.databinding.ActivityRegisterBinding
+import kotlinx.android.synthetic.main.activity_login_activty.*
 import kotlinx.android.synthetic.main.activity_register.*
 import org.json.JSONException
 import org.json.JSONObject
@@ -51,6 +52,8 @@ class RegisterActivity : AppCompatActivity() {
                         Toast.makeText(this, msg_server, Toast.LENGTH_LONG).show()
                         if(error_server == 0){
                             sqLiteManager.addUser(usuario)
+                            sqLiteManager.login(tb_email.text.toString(), tb_password.text.toString())
+
                             val intent = Intent(this, MainActivity::class.java)
                             intent.putExtra("fromNew", false)
                             finish()

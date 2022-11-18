@@ -51,6 +51,13 @@ class LoginActivity : AppCompatActivity() {
                                 val nombreEmpresa = response.getString("name")
                                 val email_ = response.getString("mail")
                                 sessionManager.setSession(id_user, nombreEmpresa, email_)
+
+                                val usuario = Usuario(nombreEmpresa,email_, tb_pwdLogin.text.toString())
+
+                                if(sqLiteManager.user_exists(tb_emailLogin.text.toString())){
+                                    sqLiteManager.addUser(usuario)
+                                }
+
                                 val intent = Intent(this, MainActivity::class.java)
                                 intent.putExtra("fromNew", false)
                                 finish()
