@@ -12,6 +12,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import android.widget.Toast;
 
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -25,6 +26,7 @@ import org.json.JSONObject;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -52,6 +54,8 @@ public class SQLiteManager extends SQLiteOpenHelper {
     private static final String PRECIO_COMPRA = "precioCompra";
     private static final String DESCRIPCION = "descripcion";
     private static final String EXPIRATION_DATE = "fecha_expiracion";
+    private static final String ESTA_SINCRONIZADO = "isSincronized";
+
 
     private static final String ID_OBJECT = "id";
     private static final String TYPE_OBJECT = "tipo";
@@ -121,6 +125,8 @@ public class SQLiteManager extends SQLiteOpenHelper {
                 .append(" TEXT, ")
                 .append(EXPIRATION_DATE)
                 .append(" TEXT, ")
+                .append(ESTA_SINCRONIZADO)
+                .append(" BIT, ")
                 .append(ID_USUARIO_PRODUCTOS)
                 .append(" INT)");
 
@@ -142,6 +148,8 @@ public class SQLiteManager extends SQLiteOpenHelper {
                 .append(" TEXT, ")
                 .append("fecha")
                 .append(" TEXT, ")
+                .append(ESTA_SINCRONIZADO)
+                .append(" BIT, ")
                 .append("idUsuario")
                 .append(" INT)");
 
@@ -226,6 +234,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
         contentValues.put(PRECIO_VENTA, producto.getPrecioVenta());
         contentValues.put(PRECIO_COMPRA, producto.getPrecioCompra());
         contentValues.put(DESCRIPCION, producto.getDescripcion());
+        contentValues.put(ESTA_SINCRONIZADO, 0);
         contentValues.put(EXPIRATION_DATE, getStringFromDate(producto.getFecha_expiracion()));
 
         sqLiteDatabase.insert(TABLE_NAME, null, contentValues);
@@ -264,6 +273,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
         contentValues.put("isEntrada", transaccion.isEntrada());
         contentValues.put("cantidad", transaccion.getCantidad());
         contentValues.put("observaciones", transaccion.getObservaciones());
+        contentValues.put(ESTA_SINCRONIZADO, 0);
         contentValues.put("fecha", getStringFromDate(transaccion.getFecha()));
 
         sqLiteDatabase.insert("Transacciones", null, contentValues);
@@ -295,8 +305,9 @@ public class SQLiteManager extends SQLiteOpenHelper {
         sqLiteDatabase.delete("Transacciones", "idTransaccion = " + transaccion.getIdTransaccion(), null);
     }
 
-    public void populateTransaccionesList(){
+    public ArrayList<Transaccion> populateTransaccionesList(){
         Transaccion.transaccionsArrayList.clear();
+        ArrayList<Transaccion> porSincronizar = null;
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
         SessionManager sessionManager = SessionManager.getInstance();
 
@@ -309,17 +320,24 @@ public class SQLiteManager extends SQLiteOpenHelper {
                     boolean isEntrada = result.getInt(2) > 0;
                     int cantidad =  result.getInt(3);
                     String observaciones = result.getString(4);
-                    Date fecha = getDateFromString(result.getString(5));
+                    boolean sincronizado = result.getInt(5) > 0;
+                    Date fecha = getDateFromString(result.getString(6));
 
                     Transaccion transaccion = new Transaccion(id, codigoProducto, isEntrada, cantidad, observaciones, fecha);
                     Transaccion.transaccionsArrayList.add(transaccion);
+
+                    if(!sincronizado){
+                        porSincronizar.add(transaccion);
+                    }
                 }
             }
         }
+        return porSincronizar;
     }
 
-    public void populateProductsList(){
+    public ArrayList<Producto> populateProductsList(){
         Producto.productoArrayList.clear();
+        ArrayList<Producto> porSincronizar = null;
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
         SessionManager sessionManager = SessionManager.getInstance();
         try (Cursor result = sqLiteDatabase.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE idUsuario = " +
@@ -332,12 +350,16 @@ public class SQLiteManager extends SQLiteOpenHelper {
                     float precioVenta = result.getInt(3);
                     float precioCompra = result.getInt(4);
                     String descripcion = result.getString(5);
-                    Date fechaExpiracion = getDateFromString(result.getString(6));
+                    boolean sincronizado = result.getInt(6) > 0;
+                    Date fechaExpiracion = getDateFromString(result.getString(7));
                     Producto producto = new Producto(id, cantidad, nombre, precioVenta, precioCompra, descripcion, fechaExpiracion);
                     Producto.productoArrayList.add(producto);
+                    if(!sincronizado)
+                        porSincronizar.add(producto);
                 }
             }
         }
+        return porSincronizar;
     }
 
     private String getStringFromDate(Date fecha_ingreso){
@@ -352,6 +374,16 @@ public class SQLiteManager extends SQLiteOpenHelper {
             return dateFormat.parse(string);
         } catch (ParseException | NullPointerException e) {
             return null;
+        }
+    }
+
+    //TODO: Sincronizar productos y transacciones en la nube
+    public void updateNube(ArrayList<Producto> productos, ArrayList<Transaccion> transacciones){
+        if(productos!=null) {
+
+        }
+        if(transacciones!=null){
+
         }
     }
 }

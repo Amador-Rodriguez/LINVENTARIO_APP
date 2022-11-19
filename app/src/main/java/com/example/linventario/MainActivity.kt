@@ -52,9 +52,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadFromDBtoMemory(){
-        val sqLiteManager = SQLiteManager.instanceOfDatabase(this);
-        sqLiteManager.populateProductsList()
-        sqLiteManager.populateTransaccionesList()
+        val sqLiteManager = SQLiteManager.instanceOfDatabase(this)
+        var productos_Sincronizar = sqLiteManager.populateProductsList()
+        var transacciones_Sincronizar = sqLiteManager.populateTransaccionesList()
+
+        //En esta funcion se manda la lista sin sincronizar
+        sqLiteManager.updateNube(productos_Sincronizar, transacciones_Sincronizar)
     }
 
 }
