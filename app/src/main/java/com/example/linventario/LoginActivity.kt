@@ -54,7 +54,7 @@ class LoginActivity : AppCompatActivity() {
 
                                 val usuario = Usuario(nombreEmpresa,email_, tb_pwdLogin.text.toString())
 
-                                if(sqLiteManager.user_exists(tb_emailLogin.text.toString())){
+                                if(!sqLiteManager.user_exists(tb_emailLogin.text.toString())){
                                     sqLiteManager.addUser(usuario)
                                 }
 

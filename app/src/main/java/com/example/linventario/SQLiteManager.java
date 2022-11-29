@@ -53,7 +53,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
     private static final String PRECIO_VENTA = "precioVenta";
     private static final String PRECIO_COMPRA = "precioCompra";
     private static final String DESCRIPCION = "descripcion";
-    private static final String EXPIRATION_DATE = "fecha_expiracion";
+
     private static final String ESTA_SINCRONIZADO = "isSincronized";
 
 
@@ -86,7 +86,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
                 .append(TABLE_USUARIO)
                 .append("(")
                 .append(ID_USER)
-                .append(" INTEGER PRIMARY KEY AUTOINCREMENT, ")
+                .append(" INTEGER PRIMARY KEY, ")
                 .append(COMPANY)
                 .append(" TEXT, ")
                 .append(EMAIL)
@@ -122,8 +122,6 @@ public class SQLiteManager extends SQLiteOpenHelper {
                 .append(PRECIO_COMPRA)
                 .append(" FLOAT, ")
                 .append(DESCRIPCION)
-                .append(" TEXT, ")
-                .append(EXPIRATION_DATE)
                 .append(" TEXT, ")
                 .append(ESTA_SINCRONIZADO)
                 .append(" BIT, ")
@@ -186,6 +184,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
 
         contentValues.put(COMPANY, usuario.getName());
+        contentValues.put(ID_USER, usuario.getIdUsuario());
         contentValues.put(EMAIL, usuario.getEmail());
         contentValues.put(PASSWORD, usuario.getPassword());
 
@@ -235,7 +234,6 @@ public class SQLiteManager extends SQLiteOpenHelper {
         contentValues.put(PRECIO_COMPRA, producto.getPrecioCompra());
         contentValues.put(DESCRIPCION, producto.getDescripcion());
         contentValues.put(ESTA_SINCRONIZADO, 0);
-        contentValues.put(EXPIRATION_DATE, getStringFromDate(producto.getFecha_expiracion()));
 
         sqLiteDatabase.insert(TABLE_NAME, null, contentValues);
     }
@@ -258,7 +256,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
         contentValues.put(PRECIO_VENTA, producto.getPrecioVenta());
         contentValues.put(PRECIO_COMPRA, producto.getPrecioCompra());
         contentValues.put(DESCRIPCION, producto.getDescripcion());
-        contentValues.put(EXPIRATION_DATE, getStringFromDate(producto.getFecha_expiracion()));
+
 
         sqLiteDatabase.update(TABLE_NAME, contentValues, "codigo = ?", new String[]{Integer.toString(producto.getCodigo())});
     }
@@ -337,7 +335,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
 
     public ArrayList<Producto> populateProductsList(){
         Producto.productoArrayList.clear();
-        ArrayList<Producto> porSincronizar = null;
+        ArrayList<Producto> porSincronizar = new ArrayList<>();
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
         SessionManager sessionManager = SessionManager.getInstance();
         try (Cursor result = sqLiteDatabase.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE idUsuario = " +
@@ -350,12 +348,13 @@ public class SQLiteManager extends SQLiteOpenHelper {
                     float precioVenta = result.getInt(3);
                     float precioCompra = result.getInt(4);
                     String descripcion = result.getString(5);
-                    boolean sincronizado = result.getInt(6) > 0;
-                    Date fechaExpiracion = getDateFromString(result.getString(7));
-                    Producto producto = new Producto(id, cantidad, nombre, precioVenta, precioCompra, descripcion, fechaExpiracion);
+                    boolean sincronizado = result.getInt(7) > 0;
+
+                    Producto producto = new Producto(id, cantidad, nombre, precioVenta, precioCompra, descripcion);
                     Producto.productoArrayList.add(producto);
                     if(!sincronizado)
                         porSincronizar.add(producto);
+
                 }
             }
         }
@@ -377,13 +376,5 @@ public class SQLiteManager extends SQLiteOpenHelper {
         }
     }
 
-    //TODO: Sincronizar productos y transacciones en la nube
-    public void updateNube(ArrayList<Producto> productos, ArrayList<Transaccion> transacciones){
-        if(productos!=null) {
 
-        }
-        if(transacciones!=null){
-
-        }
-    }
 }

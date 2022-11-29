@@ -53,6 +53,7 @@ class RegisterActivity : AppCompatActivity() {
 
                         Toast.makeText(this, msg_server, Toast.LENGTH_LONG).show()
                         if(error_server == 0){
+                            usuario.idUsuario= id_user
                             sqLiteManager.addUser(usuario)
                             sqLiteManager.login(tb_email.text.toString(), tb_password.text.toString())
 

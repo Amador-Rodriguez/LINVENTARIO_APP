@@ -69,12 +69,12 @@ class NewProductActivity : AppCompatActivity() {
         val precioVenta = tb_precioVenta.text.toString()
         val precioCompra = tb_precioCompra.text.toString()
         val descripcion = tb_descripcion.text.toString()
-        val formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm:ss")
-        val current = LocalDateTime.now().format(formatter)
+        //val formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm:ss")
+        //val current = LocalDateTime.now().format(formatter)
         //TODO: SABER SI DE VERDAD VAMOS A USAR EL CAMPO DE QUE SI EXPIRA O NO
 
         return Producto(codigo.toInt(), cantidad.toInt(), nombreProducto, precioVenta.toFloat(),
-            precioCompra.toFloat(), descripcion, sqLiteManager.getDateFromString(current))
+            precioCompra.toFloat(), descripcion)
     }
 
     private fun updateLabel(calendar: Calendar){

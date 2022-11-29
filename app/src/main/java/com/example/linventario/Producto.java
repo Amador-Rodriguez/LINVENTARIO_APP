@@ -13,14 +13,14 @@ public class Producto {
     private Date fecha_expiracion;
 
     //Con fecha de expiracion
-    public Producto(int codigo, int cantidad, String nombre_producto, float precioVenta, float precioCompra, String descripcion, Date FechaExpiracion) {
+    public Producto(int codigo, int cantidad, String nombre_producto, float precioVenta, float precioCompra, String descripcion) {
         this.codigo = codigo;
         this.cantidad = cantidad;
         this.nombre_producto = nombre_producto;
         this.precioVenta = precioVenta;
         this.precioCompra = precioCompra;
         this.descripcion = descripcion;
-        this.fecha_expiracion = FechaExpiracion;
+
     }
 
     public int getCantidad() {

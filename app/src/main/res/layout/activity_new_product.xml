@@ -91,7 +91,7 @@
         android:backgroundTint="@color/yellow_linventario"
         android:text="DD-MM-YYYY"
         android:textAllCaps="false"
-
+        android:visibility="gone"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="@+id/chb_expira"
         app:layout_constraintEnd_toEndOf="parent"
@@ -148,6 +148,7 @@
         android:buttonTint="@color/white"
         android:minHeight="48dp"
         android:text="Expira"
+        android:visibility="gone"
         android:textColor="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/btn_saveNewProduct"
         app:layout_constraintStart_toStartOf="parent"

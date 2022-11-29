@@ -30,7 +30,6 @@ class InventoryAdapter (private var listProductos: MutableList<Producto>, privat
         fun asignarInformacion(producto: Producto, onProductListener_fun: OnProductListener) {
             itemView.txt_cantidad.text = producto.cantidad.toString()
             itemView.txt_nombreProducto.text = producto.nombre_producto
-            itemView.txt_fecha.text = producto.fecha_expiracion.toString()
             itemView.txt_Descripcion.text = producto.descripcion.toString()
 
             this.var_onProductListener = onProductListener_fun
