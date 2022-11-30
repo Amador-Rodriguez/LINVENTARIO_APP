@@ -2,11 +2,11 @@ package com.example.linventario
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import com.example.linventario.databinding.FragmentInventoryBinding
 
 // TODO: Rename parameter arguments, choose names that match
@@ -53,12 +53,22 @@ class InventoryFragment : Fragment(), InventoryAdapter.OnProductListener {
             startActivity(intent)
         }
         bind.btnDelete.setOnClickListener{
-            Toast.makeText(activity, MENSAJE_SELECCION + "eliminar", Toast.LENGTH_SHORT).show()
-            action = 1
+            if(SQLiteManager.isOnlineNet()){
+                Toast.makeText(activity, MENSAJE_SELECCION + "eliminar", Toast.LENGTH_SHORT).show()
+                action = 1
+            }else{
+                Toast.makeText(activity, "Para borrar productos necesitas conexión a internet", Toast.LENGTH_SHORT).show()
+            }
+
         }
         bind.btnEdit.setOnClickListener{
-            Toast.makeText(activity, MENSAJE_SELECCION + "editar", Toast.LENGTH_SHORT).show()
-            action = 2
+            if(SQLiteManager.isOnlineNet()){
+                Toast.makeText(activity, MENSAJE_SELECCION + "editar", Toast.LENGTH_SHORT).show()
+                action = 2
+            }else{
+                Toast.makeText(activity, "Para editar productos necesitas conexión a internet", Toast.LENGTH_SHORT).show()
+            }
+
         }
 
         // Inflate the layout for this fragment
@@ -86,12 +96,19 @@ class InventoryFragment : Fragment(), InventoryAdapter.OnProductListener {
     }
 
     override fun onProductClick(position: Int) {
-        val sqLiteManager = SQLiteManager.instanceOfDatabase(activity)
+        val sqLiteManager = SQLiteManager.instanceOfDatabase(context)
 
         //Eliminar
         if (action == 1){
+
+            val producto = Producto.productoArrayList[position]
+            (activity as MainActivity?)?.borrarProductoNube(producto)
+
+
             sqLiteManager.deleteProducto(position)
             adapterGlobal.update(Producto.productoArrayList)
+
+
         }
         //Editar
         if (action == 2){

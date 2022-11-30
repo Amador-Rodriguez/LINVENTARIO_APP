@@ -8,7 +8,6 @@ import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.example.linventario.databinding.ActivityMainBinding
-import kotlinx.android.synthetic.main.activity_register.*
 import org.json.JSONException
 import org.json.JSONObject
 
@@ -68,8 +67,50 @@ class MainActivity : AppCompatActivity() {
         updateNube(productos_Sincronizar, transacciones_Sincronizar)
     }
 
+     fun borrarProductoNube(producto:Producto ){
+        val queue = Volley.newRequestQueue(this)
+
+        val session = SessionManager.getInstance()
+
+        val datos = HashMap<String?, String?>()
+        datos["id_producto"] = producto.codigo.toString()
+        datos["id_usuario"] = session.id.toString()
+
+        val datos_toSend = JSONObject(datos as Map<String?, String?>)
+        val url = "http://192.168.0.7:8080/PSM/producto_inc.php"
+
+        val jsonObjectRequest = JsonObjectRequest(
+            Request.Method.PATCH, url, datos_toSend,
+            { response ->
+                try {
+                    val msg_server = response.getString("mensaje")
+                    val error_server = response.getInt("error")
+
+
+                    if(error_server == 0){
+                        Toast.makeText(this, "Borrado de la nube", Toast.LENGTH_LONG).show()
+
+                    }else{
+                        Toast.makeText(this, msg_server, Toast.LENGTH_LONG).show()
+                    }
+                } catch (e: JSONException) {
+                    e.printStackTrace()
+                }
+            }
+        ) {
+
+            Toast.makeText(this, "$it", Toast.LENGTH_LONG).show()
+
+        }
+
+        HttpsTrustManager.allowAllSSL()
+        queue.add(jsonObjectRequest)
+    }
+
     //TODO: Sincronizar productos y transacciones en la nube
     private fun updateNube(productos: ArrayList<Producto?>?, transacciones: ArrayList<Transaccion?>?) {
+        val sqLiteManager = SQLiteManager.instanceOfDatabase(this)
+
         if (productos != null) {
 
             for (i in 0 until productos.size) {
@@ -100,8 +141,8 @@ class MainActivity : AppCompatActivity() {
 
                             if(error_server == 0){
 
+                                sqLiteManager.setSync(productos[i])
                                 Toast.makeText(this, "Sincronizado", Toast.LENGTH_LONG).show()
-
 
                             }else{
                                 Toast.makeText(this, msg_server, Toast.LENGTH_LONG).show()
@@ -116,10 +157,6 @@ class MainActivity : AppCompatActivity() {
                 queue.add(jsonObjectRequest)
 
             }
-
-
-
-
 
         }
         if (transacciones != null) {

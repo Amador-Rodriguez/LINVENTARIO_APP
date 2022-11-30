@@ -238,6 +238,37 @@ public class SQLiteManager extends SQLiteOpenHelper {
         sqLiteDatabase.insert(TABLE_NAME, null, contentValues);
     }
 
+    public void addProductoFromNube (Producto producto){
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        SessionManager sessionManager = SessionManager.getInstance();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(ID_FIELD, producto.getCodigo());
+        contentValues.put(ID_USUARIO_PRODUCTOS, sessionManager.getId());
+        contentValues.put(CANTIDAD, producto.getCantidad());
+        contentValues.put(NAME_FIELD, producto.getNombre_producto());
+        contentValues.put(PRECIO_VENTA, producto.getPrecioVenta());
+        contentValues.put(PRECIO_COMPRA, producto.getPrecioCompra());
+        contentValues.put(DESCRIPCION, producto.getDescripcion());
+        contentValues.put(ESTA_SINCRONIZADO, 1);
+
+        sqLiteDatabase.insert(TABLE_NAME, null, contentValues);
+    }
+
+    public boolean producto_exists(Producto producto){
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+        SessionManager sessionManager = SessionManager.getInstance();
+        int id = sessionManager.getId();
+        int codigo = producto.getCodigo();
+        try(Cursor result = sqLiteDatabase.rawQuery("SELECT idUsuario FROM " + "Productos WHERE idUsuario = ? AND codigo = ?", new String[] {Integer.toString(id),Integer.toString(codigo)})){
+            if(result.getCount() != 0){
+                return true;
+            }else{
+                return false;
+            }
+        }
+    }
+
     //TODO: Eliminar tambien la transaccion del producto
     public void deleteProducto(Integer position){
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
@@ -256,9 +287,21 @@ public class SQLiteManager extends SQLiteOpenHelper {
         contentValues.put(PRECIO_VENTA, producto.getPrecioVenta());
         contentValues.put(PRECIO_COMPRA, producto.getPrecioCompra());
         contentValues.put(DESCRIPCION, producto.getDescripcion());
+        //contentValues.put(ESTA_SINCRONIZADO, 1);
 
 
-        sqLiteDatabase.update(TABLE_NAME, contentValues, "codigo = ?", new String[]{Integer.toString(producto.getCodigo())});
+        SessionManager sessionManager = SessionManager.getInstance();
+        sqLiteDatabase.update(TABLE_NAME, contentValues, "codigo = ? AND idUsuario = ?", new String[]{Integer.toString(producto.getCodigo()), Integer.toString(sessionManager.getId()) });
+    }
+
+    public void setSync(Producto producto){
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(ESTA_SINCRONIZADO, 1);
+
+        SessionManager sessionManager = SessionManager.getInstance();
+        sqLiteDatabase.update(TABLE_NAME, contentValues, "codigo = ? AND idUsuario = ?", new String[]{Integer.toString(producto.getCodigo()), Integer.toString(sessionManager.getId()) });
     }
 
     public void addTransaccion(Transaccion transaccion){

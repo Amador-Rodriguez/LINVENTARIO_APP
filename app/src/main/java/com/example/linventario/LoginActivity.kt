@@ -5,10 +5,12 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Request
+import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.example.linventario.databinding.ActivityLoginActivtyBinding
 import kotlinx.android.synthetic.main.activity_login_activty.*
+import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 
@@ -58,6 +60,10 @@ class LoginActivity : AppCompatActivity() {
                                     sqLiteManager.addUser(usuario)
                                 }
 
+                                descargarProductos(id_user.toString())
+
+
+
                                 val intent = Intent(this, MainActivity::class.java)
                                 intent.putExtra("fromNew", false)
                                 finish()
@@ -104,4 +110,62 @@ class LoginActivity : AppCompatActivity() {
         }
 
     }
+
+    private fun descargarProductos(idUsuario: String){
+
+        val sqLiteManager = SQLiteManager.instanceOfDatabase(this)
+        val queue = Volley.newRequestQueue(this)
+
+        val objeto = JSONObject()
+
+        objeto.put("id_usuario",idUsuario)
+
+        val data = JSONArray()
+
+        data.put(objeto)
+
+
+
+        val url = "http://192.168.0.7:8080/PSM/productoGetAll.php"
+
+        val jsonArrayRequest = JsonArrayRequest(
+            Request.Method.POST, url, data,
+            { response ->
+                try {
+                    for (i in 0 until response.length()) {
+                        val producto = response.getJSONObject(i)
+
+                        val id_producto = producto.getInt("id_producto")
+                        val id_usuario = producto.getString("id_usuario")
+                        val cantidad = producto.getInt("cantidad")
+                        val nombre = producto.getString("nombre")
+                        val precio_venta = producto.getDouble("precio_venta")
+                        val precio_compra = producto.getDouble("precio_compra")
+                        val descripcion = producto.getString("descripcion")
+
+                        val producto_ = Producto(id_producto,cantidad,nombre,precio_venta.toFloat(),precio_compra.toFloat(),descripcion)
+
+                        if(!sqLiteManager.producto_exists(producto_)){
+                            sqLiteManager.addProductoFromNube(producto_)
+
+                        }
+
+                    }
+
+
+                    Toast.makeText(this, "Productos descargados correctamente", Toast.LENGTH_LONG).show()
+
+
+                } catch (e: JSONException) {
+                    e.printStackTrace()
+                }
+            }
+        ) {
+            error -> error.printStackTrace()
+        }
+
+        HttpsTrustManager.allowAllSSL()
+        queue.add(jsonArrayRequest)
+    }
+
 }
