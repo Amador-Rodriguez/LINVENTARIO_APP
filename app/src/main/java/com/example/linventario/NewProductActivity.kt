@@ -25,6 +25,7 @@ import java.util.*
 class NewProductActivity : AppCompatActivity() {
     private lateinit var btnDatePicker: Button
     private lateinit var btnGuardar: Button
+    private var existeProducto = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,8 +57,14 @@ class NewProductActivity : AppCompatActivity() {
             val producto = makeProducto()
 
             if (positionProducto == -1){
-                Producto.productoArrayList.add(producto)
-                sqLiteManager.addProducto(producto)
+                if (existeProducto){
+                    Toast.makeText(this, "Ya existe un producto con ese codigo", Toast.LENGTH_SHORT).show()
+                    existeProducto = false
+                }
+                else{
+                    Producto.productoArrayList.add(producto)
+                    sqLiteManager.addProducto(producto)
+                }
             }
             else{
                 sqLiteManager.editProducto(producto)
@@ -120,6 +127,14 @@ class NewProductActivity : AppCompatActivity() {
         //val formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm:ss")
         //val current = LocalDateTime.now().format(formatter)
         //TODO: SABER SI DE VERDAD VAMOS A USAR EL CAMPO DE QUE SI EXPIRA O NO
+
+        if(Producto.productoArrayList.isNotEmpty()){
+            Producto.productoArrayList.forEach{
+                if(it.codigo.equals(codigo.toInt())){
+                    existeProducto = true
+                }
+            }
+        }
 
         return Producto(codigo.toInt(), cantidad.toInt(), nombreProducto, precioVenta.toFloat(),
             precioCompra.toFloat(), descripcion)

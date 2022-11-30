@@ -5,9 +5,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.RecyclerView
 import com.example.linventario.databinding.FragmentInventoryBinding
+import java.util.*
+import kotlin.collections.ArrayList
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -15,12 +19,13 @@ private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 private const val MENSAJE_SELECCION = "Seleccione el elemento que quiere "
 private lateinit var adapterGlobal: InventoryAdapter
+private lateinit var recyclerView: RecyclerView
 /**
  * A simple [Fragment] subclass.
  * Use the [InventoryFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class InventoryFragment : Fragment(), InventoryAdapter.OnProductListener {
+class InventoryFragment : Fragment(), InventoryAdapter.OnProductListener, SearchView.OnQueryTextListener {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -46,6 +51,9 @@ class InventoryFragment : Fragment(), InventoryAdapter.OnProductListener {
         if(Producto.productoArrayList.isNotEmpty()) {
             bind.rvListaProductos.adapter = adaptador
         }
+        recyclerView = bind.rvListaProductos
+
+        //bind.swBusquedaProductos.setOnQueryTextListener()
 
         bind.btnNew.setOnClickListener{
             val intent = Intent (activity, NewProductActivity::class.java)
@@ -117,5 +125,28 @@ class InventoryFragment : Fragment(), InventoryAdapter.OnProductListener {
             startActivity(intent)
         }
         action = 0
+    }
+
+    override fun onQueryTextSubmit(p0: String?): Boolean {
+        TODO("Not yet implemented")
+    }
+
+    override fun onQueryTextChange(p0: String?): Boolean {
+        var listaTemporal = Producto.productoArrayList
+        val serchText = p0!!.lowercase(Locale.getDefault())
+
+        if(serchText.isNotEmpty()){
+            Producto.productoArrayList.clear()
+            listaTemporal.forEach{
+                if (it.nombre_producto.lowercase(Locale.getDefault()).contains(serchText)){
+                    Producto.productoArrayList.add(it)
+                }
+            }
+            recyclerView.adapter!!.notifyDataSetChanged()
+            Producto.productoArrayList.clear()
+            Producto.productoArrayList.addAll(listaTemporal)
+        }
+
+        return false
     }
 }

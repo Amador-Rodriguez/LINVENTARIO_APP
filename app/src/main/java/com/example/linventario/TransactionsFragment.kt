@@ -6,10 +6,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import android.widget.Toast
+import androidx.recyclerview.widget.RecyclerView
 import com.example.linventario.databinding.FragmentInventoryBinding
 import com.example.linventario.databinding.FragmentTransactionsBinding
 import kotlinx.android.synthetic.main.fragment_transactions.*
+import java.util.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -17,13 +20,14 @@ private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 private lateinit var adapterGlobal : TransaccionAdapter
 private var eliminar = false
+private lateinit var recyclerView: RecyclerView
 
 /**
  * A simple [Fragment] subclass.
  * Use the [TransactionsFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class TransactionsFragment : Fragment(), TransaccionAdapter.OnProductListener {
+class TransactionsFragment : Fragment(), TransaccionAdapter.OnProductListener, SearchView.OnQueryTextListener {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -47,6 +51,8 @@ class TransactionsFragment : Fragment(), TransaccionAdapter.OnProductListener {
 
         if(Transaccion.transaccionsArrayList.isNotEmpty())
             bind.rvListaTransacciones.adapter = adaptador
+
+        recyclerView = bind.rvListaTransacciones
 
         bind.btnNewTransaction.setOnClickListener{
             val intent = Intent (activity, newTransactionActivity::class.java)
@@ -91,5 +97,27 @@ class TransactionsFragment : Fragment(), TransaccionAdapter.OnProductListener {
             startActivity(intent)
         }
         eliminar = false
+    }
+
+    override fun onQueryTextSubmit(p0: String?): Boolean {
+        TODO("Not yet implemented")
+    }
+
+    override fun onQueryTextChange(p0: String?): Boolean {
+        var listaTemporal = Transaccion.transaccionsArrayList
+        val serchText = p0!!.lowercase(Locale.getDefault())
+
+        if(serchText.isNotEmpty()){
+            Transaccion.transaccionsArrayList.clear()
+            listaTemporal.forEach{
+                if (it.codigoProducto.toString().contains(serchText)){
+                    Transaccion.transaccionsArrayList.add(it)
+                }
+            }
+            recyclerView.adapter!!.notifyDataSetChanged()
+            Transaccion.transaccionsArrayList.clear()
+            Transaccion.transaccionsArrayList.addAll(listaTemporal)
+        }
+        return false
     }
 }
