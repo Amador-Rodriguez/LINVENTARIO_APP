@@ -347,7 +347,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
 
     public ArrayList<Transaccion> populateTransaccionesList(){
         Transaccion.transaccionsArrayList.clear();
-        ArrayList<Transaccion> porSincronizar = null;
+        ArrayList<Transaccion> porSincronizar = new ArrayList<>();
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
         SessionManager sessionManager = SessionManager.getInstance();
 
@@ -360,8 +360,9 @@ public class SQLiteManager extends SQLiteOpenHelper {
                     boolean isEntrada = result.getInt(2) > 0;
                     int cantidad =  result.getInt(3);
                     String observaciones = result.getString(4);
-                    boolean sincronizado = result.getInt(5) > 0;
-                    Date fecha = getDateFromString(result.getString(6));
+                    Date fecha = getDateFromString(result.getString(5));
+                    boolean sincronizado = result.getInt(6) > 0;
+
 
                     Transaccion transaccion = new Transaccion(id, codigoProducto, isEntrada, cantidad, observaciones, fecha);
                     Transaccion.transaccionsArrayList.add(transaccion);
