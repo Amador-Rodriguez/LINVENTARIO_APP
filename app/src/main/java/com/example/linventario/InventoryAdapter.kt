@@ -3,8 +3,11 @@ package com.example.linventario
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.custom_item_producto.view.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 class InventoryAdapter (private var listProductos: MutableList<Producto>, private var mOnProductListener: OnProductListener) :
     RecyclerView.Adapter<InventoryAdapter.ChatViewHolder>(){
@@ -40,6 +43,8 @@ class InventoryAdapter (private var listProductos: MutableList<Producto>, privat
             var_onProductListener.onProductClick(adapterPosition)
         }
     }
+
+
 
     fun update(newLista: MutableList<Producto>){
         listProductos = newLista

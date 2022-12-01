@@ -30,7 +30,7 @@ class TransaccionAdapter(private var listTransacciones: MutableList<Transaccion>
 
             fun asignarInformacion(transaccion: Transaccion, onProductListener_fun: OnProductListener) {
                 itemView.txt_cantidad.text = transaccion.cantidad.toString()
-                itemView.txt_nombreProducto.text = transaccion.codigoProducto.toString()
+                itemView.txt_nombreProducto.text = transaccion.nombreProducto.toString()
                 itemView.txt_fecha.text = transaccion.fecha.toString()
                 itemView.txt_Descripcion.text = transaccion.observaciones.toString()
 

@@ -362,9 +362,19 @@ public class SQLiteManager extends SQLiteOpenHelper {
                     String observaciones = result.getString(4);
                     Date fecha = getDateFromString(result.getString(5));
                     boolean sincronizado = result.getInt(6) > 0;
+                    String nombreProducto = "";
 
+                    try(Cursor result2 = sqLiteDatabase.rawQuery("SELECT " + NAME_FIELD + " FROM " + TABLE_NAME + " WHERE codigo = " +
+                            codigoProducto + " AND idUsuario = " + sessionManager.getId(), null)){
 
-                    Transaccion transaccion = new Transaccion(id, codigoProducto, isEntrada, cantidad, observaciones, fecha);
+                        if(result.getCount()!=0){
+                            while(result2.moveToNext()){
+                                nombreProducto = result2.getString(0);
+                            }
+                        }
+                    }
+
+                    Transaccion transaccion = new Transaccion(id, nombreProducto, isEntrada, cantidad, observaciones, fecha);
                     Transaccion.transaccionsArrayList.add(transaccion);
 
                     if(!sincronizado){
