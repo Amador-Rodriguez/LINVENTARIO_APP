@@ -61,6 +61,7 @@ class LoginActivity : AppCompatActivity() {
                                 }
 
                                 descargarProductos(id_user.toString())
+                                descargarTransacciones(id_user.toString())
 
 
 
@@ -162,6 +163,57 @@ class LoginActivity : AppCompatActivity() {
             }
         ) {
             error -> error.printStackTrace()
+        }
+
+        HttpsTrustManager.allowAllSSL()
+        queue.add(jsonArrayRequest)
+    }
+
+    private fun descargarTransacciones(idUsuario: String){
+
+        val sqLiteManager = SQLiteManager.instanceOfDatabase(this)
+        val queue = Volley.newRequestQueue(this)
+
+        val objeto = JSONObject()
+
+        objeto.put("idUsuario",idUsuario)
+
+        val data = JSONArray()
+
+        data.put(objeto)
+
+        val url = "http://192.168.0.7:8080/PSM/transaccionGetAll.php"
+
+        val jsonArrayRequest = JsonArrayRequest(
+            Request.Method.POST, url, data,
+            { response ->
+                try {
+                    for (i in 0 until response.length()) {
+                        val transaccion_r = response.getJSONObject(i)
+
+                        val idTransaccion = transaccion_r.getInt("idTransaccion")
+                        val fecha = transaccion_r.getString("fecha")
+                        val idUsuario = transaccion_r.getInt("idUsuario")
+                        val observaciones = transaccion_r.getString("observaciones")
+                        val cantidad = transaccion_r.getInt("cantidad")
+                        val codigoProducto = transaccion_r.getInt("codigoProducto")
+                        val isEntrada = transaccion_r.getInt("isEntrada")
+
+                        val transaccion = Transaccion(idTransaccion,codigoProducto, isEntrada==1,cantidad,observaciones,fecha)
+
+                        if(!sqLiteManager.Transaccion_exists(transaccion)){
+                            sqLiteManager.addTransaccionFromNube(transaccion)
+                        }
+                    }
+
+                    Toast.makeText(this, "Transacciones descargadas correctamente", Toast.LENGTH_LONG).show()
+
+                } catch (e: JSONException) {
+                    e.printStackTrace()
+                }
+            }
+        ) {
+                error -> error.printStackTrace()
         }
 
         HttpsTrustManager.allowAllSSL()

@@ -11,9 +11,9 @@ public class Transaccion {
     private boolean isEntrada;
     private int cantidad;
     private String observaciones;
-    private Date fecha;
+    private String fecha;
 
-    public Transaccion(int idTransaccion, int codigoProducto, boolean isEntrada, int cantidad, String observaciones, Date fecha) {
+    public Transaccion(int idTransaccion, int codigoProducto, boolean isEntrada, int cantidad, String observaciones, String fecha) {
         this.idTransaccion = idTransaccion;
         this.codigoProducto = codigoProducto;
         this.isEntrada = isEntrada;
@@ -62,11 +62,11 @@ public class Transaccion {
         this.observaciones = observaciones;
     }
 
-    public Date getFecha() {
+    public String getFecha() {
         return fecha;
     }
 
-    public void setFecha(Date fecha) {
+    public void setFecha(String fecha) {
         this.fecha = fecha;
     }
 }

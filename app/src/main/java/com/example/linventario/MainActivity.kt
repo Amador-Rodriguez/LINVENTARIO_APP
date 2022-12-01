@@ -142,7 +142,7 @@ class MainActivity : AppCompatActivity() {
                             if(error_server == 0){
 
                                 sqLiteManager.setSync(productos[i])
-                                Toast.makeText(this, "Sincronizado", Toast.LENGTH_LONG).show()
+                                Toast.makeText(this, "Sincronizado productos", Toast.LENGTH_LONG).show()
 
                             }else{
                                 Toast.makeText(this, msg_server, Toast.LENGTH_LONG).show()
@@ -160,6 +160,52 @@ class MainActivity : AppCompatActivity() {
 
         }
         if (transacciones != null) {
+
+            for (i in 0 until transacciones.size) {
+                val queue = Volley.newRequestQueue(this)
+
+                val session = SessionManager.getInstance()
+
+                val data = HashMap<String?, String?>()
+                data["idTransaccion"] = transacciones[i]?.idTransaccion.toString()
+                data["codigoProducto"] = transacciones[i]?.codigoProducto.toString()
+                data["idUsuario"] = session.id.toString()
+                data["isEntrada"] = if(transacciones[i]?.isEntrada == true)"1" else "0"
+                data["cantidad"] = transacciones[i]?.cantidad.toString()
+                data["observaciones"] = transacciones[i]?.observaciones.toString()
+                data["fecha"] = transacciones[i]?.fecha.toString()
+
+
+                val datos_toSend = JSONObject(data as Map<String?, String?>)
+                val url = "http://192.168.0.7:8080/PSM/transaction_inc.php"
+
+                val jsonObjectRequest = JsonObjectRequest(
+                    Request.Method.POST, url, datos_toSend,
+                    { response ->
+                        try {
+                            val msg_server = response.getString("mensaje")
+                            val error_server = response.getInt("error")
+
+
+                            if(error_server == 0){
+
+                                sqLiteManager.setSyncTransaccion(transacciones[i])
+                                Toast.makeText(this, "Sincronizado transacciones", Toast.LENGTH_LONG).show()
+
+                            }else{
+                                Toast.makeText(this, msg_server, Toast.LENGTH_LONG).show()
+                            }
+                        } catch (e: JSONException) {
+                            e.printStackTrace()
+                        }
+                    }
+                ) { error -> error.printStackTrace() }
+
+                HttpsTrustManager.allowAllSSL()
+                queue.add(jsonObjectRequest)
+
+            }
+
         }
     }
 

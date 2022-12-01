@@ -303,6 +303,67 @@ public class SQLiteManager extends SQLiteOpenHelper {
         sqLiteDatabase.update(TABLE_NAME, contentValues, "codigo = ? AND idUsuario = ?", new String[]{Integer.toString(producto.getCodigo()), Integer.toString(sessionManager.getId()) });
     }
 
+    public void setSyncTransaccion(Transaccion transaccion){
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(ESTA_SINCRONIZADO, 1);
+
+        SessionManager sessionManager = SessionManager.getInstance();
+        sqLiteDatabase.update("Transacciones", contentValues, "idTransaccion = ? AND idUsuario = ?", new String[]{Integer.toString(transaccion.getIdTransaccion()), Integer.toString(sessionManager.getId()) });
+    }
+
+    public void addTransaccionFromNube (Transaccion transaccion){
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        SessionManager sessionManager = SessionManager.getInstance();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("idTransaccion", transaccion.getIdTransaccion());
+        contentValues.put("codigoProducto", transaccion.getCodigoProducto());
+        contentValues.put("idUsuario", sessionManager.getId());
+        contentValues.put("isEntrada", transaccion.isEntrada());
+        contentValues.put("cantidad", transaccion.getCantidad());
+        contentValues.put("observaciones", transaccion.getObservaciones());
+        contentValues.put(ESTA_SINCRONIZADO, 1);
+        contentValues.put("fecha", transaccion.getFecha());
+
+        sqLiteDatabase.insert("Transacciones", null, contentValues);
+
+        int cantidadProductos = 0;
+        int nuevaCantidad = 0;
+
+        try(Cursor result = sqLiteDatabase.rawQuery("SELECT cantidad FROM Productos WHERE codigo = " + transaccion.getCodigoProducto(), null)){
+            if(result.getCount()!=0){
+                result.moveToNext();
+                cantidadProductos = result.getInt(0);
+            }
+
+        }
+
+        if(!transaccion.isEntrada()){
+            nuevaCantidad = cantidadProductos - transaccion.getCantidad();
+        }
+        else
+            nuevaCantidad = cantidadProductos + transaccion.getCantidad();
+
+        contentValues.clear();
+        contentValues.put(CANTIDAD, nuevaCantidad);
+        sqLiteDatabase.update(TABLE_NAME, contentValues, "codigo = ?", new String[]{Integer.toString(transaccion.getCodigoProducto())});
+    }
+
+    public boolean Transaccion_exists(Transaccion transaccion){
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+        SessionManager sessionManager = SessionManager.getInstance();
+        int id = sessionManager.getId();
+        int idTransaccion = transaccion.getIdTransaccion();
+        try(Cursor result = sqLiteDatabase.rawQuery("SELECT idTransaccion FROM " + "Transacciones WHERE idTransaccion = ? AND idUsuario = ?", new String[] {Integer.toString(id),Integer.toString(idTransaccion)})){
+            if(result.getCount() != 0){
+                return true;
+            }else{
+                return false;
+            }
+        }
+    }
+
     public void addTransaccion(Transaccion transaccion){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         SessionManager sessionManager = SessionManager.getInstance();
@@ -314,7 +375,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
         contentValues.put("cantidad", transaccion.getCantidad());
         contentValues.put("observaciones", transaccion.getObservaciones());
         contentValues.put(ESTA_SINCRONIZADO, 0);
-        contentValues.put("fecha", getStringFromDate(transaccion.getFecha()));
+        contentValues.put("fecha", transaccion.getFecha());
 
         sqLiteDatabase.insert("Transacciones", null, contentValues);
 
@@ -360,7 +421,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
                     boolean isEntrada = result.getInt(2) > 0;
                     int cantidad =  result.getInt(3);
                     String observaciones = result.getString(4);
-                    Date fecha = getDateFromString(result.getString(5));
+                    String fecha = result.getString(5);
                     boolean sincronizado = result.getInt(6) > 0;
 
 

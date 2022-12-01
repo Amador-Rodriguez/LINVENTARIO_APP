@@ -78,7 +78,7 @@ class newTransactionActivity : AppCompatActivity(), InventoryAdapter.OnProductLi
         val idTransaccion = Transaccion.transaccionsArrayList.size + 1
         val formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm:ss")
         val current = LocalDateTime.now().format(formatter)
-        return Transaccion(idTransaccion, productoT.codigo, isEntrada, cantidad, observacion, sqLiteManager.getDateFromString(current))
+        return Transaccion(idTransaccion, productoT.codigo, isEntrada, cantidad, observacion, current)
     }
 
     override fun onProductClick(position: Int){
