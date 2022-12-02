@@ -7,6 +7,7 @@ public class Transaccion {
     public static ArrayList<Transaccion> transaccionsArrayList = new ArrayList<>();
     private int idTransaccion;
     private int codigoProducto;
+    private String nombreProducto;
     private int idUsuario;
     private boolean isEntrada;
     private int cantidad;
@@ -16,6 +17,15 @@ public class Transaccion {
     public Transaccion(int idTransaccion, int codigoProducto, boolean isEntrada, int cantidad, String observaciones, String fecha) {
         this.idTransaccion = idTransaccion;
         this.codigoProducto = codigoProducto;
+        this.isEntrada = isEntrada;
+        this.cantidad = cantidad;
+        this.observaciones = observaciones;
+        this.fecha = fecha;
+    }
+
+    public Transaccion(int idTransaccion, String NombreProducto, boolean isEntrada, int cantidad, String observaciones, Date fecha){
+        this.idTransaccion = idTransaccion;
+        this.nombreProducto = NombreProducto;
         this.isEntrada = isEntrada;
         this.cantidad = cantidad;
         this.observaciones = observaciones;
@@ -68,6 +78,14 @@ public class Transaccion {
 
     public void setFecha(String fecha) {
         this.fecha = fecha;
+    }
+
+    public String getNombreProducto() {
+        return nombreProducto;
+    }
+
+    public void setNombreProducto(String nombreProducto) {
+        this.nombreProducto = nombreProducto;
     }
 }
 

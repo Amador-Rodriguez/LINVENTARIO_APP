@@ -5,8 +5,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.SearchView
+//import androidx.appcompat.widget.SearchView
 import android.widget.Toast
+import android.widget.SearchView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.example.linventario.databinding.FragmentInventoryBinding
@@ -49,7 +51,7 @@ class InventoryFragment : Fragment(), InventoryAdapter.OnProductListener, Search
         val adaptador = InventoryAdapter(Producto.productoArrayList, this)
         adapterGlobal = adaptador
         if(Producto.productoArrayList.isNotEmpty()) {
-            bind.rvListaProductos.adapter = adaptador
+            bind.rvListaProductos.adapter = adapterGlobal
         }
         recyclerView = bind.rvListaProductos
 
@@ -78,6 +80,8 @@ class InventoryFragment : Fragment(), InventoryAdapter.OnProductListener, Search
             }
 
         }
+
+        bind.swBusquedaProductos.setOnQueryTextListener(this)
 
         // Inflate the layout for this fragment
         return bind.root
@@ -128,11 +132,27 @@ class InventoryFragment : Fragment(), InventoryAdapter.OnProductListener, Search
     }
 
     override fun onQueryTextSubmit(p0: String?): Boolean {
-        TODO("Not yet implemented")
+        return false
     }
 
-    override fun onQueryTextChange(p0: String?): Boolean {
-        var listaTemporal = Producto.productoArrayList
+    override fun onQueryTextChange(p0: String): Boolean {
+        if(Producto.productoArrayList.isNotEmpty()) {
+            var listaProductosFiltrada = filtrado(p0)
+
+            if(listaProductosFiltrada.isNotEmpty()) {
+                adapterGlobal = InventoryAdapter(listaProductosFiltrada, this)
+            }
+            else{
+                adapterGlobal = InventoryAdapter(Producto.productoArrayList, this)
+                Toast.makeText(activity, "No se encontro ningun elemento con ese nombre", Toast.LENGTH_SHORT).show()
+            }
+            recyclerView.adapter = adapterGlobal
+        }
+        else
+            Toast.makeText(activity, "No existe ningun producto", Toast.LENGTH_SHORT).show()
+        return false
+
+        /*var listaTemporal = Producto.productoArrayList
         val serchText = p0!!.lowercase(Locale.getDefault())
 
         if(serchText.isNotEmpty()){
@@ -145,8 +165,18 @@ class InventoryFragment : Fragment(), InventoryAdapter.OnProductListener, Search
             recyclerView.adapter!!.notifyDataSetChanged()
             Producto.productoArrayList.clear()
             Producto.productoArrayList.addAll(listaTemporal)
-        }
+        }*/
+    }
 
-        return false
+    private fun filtrado(porFiltrar : String) : ArrayList<Producto>{
+        var lista = ArrayList<Producto>()
+        if(porFiltrar.isNotEmpty()){
+            Producto.productoArrayList.forEach{
+                if (it.nombre_producto.lowercase(Locale.getDefault()).contains(porFiltrar.lowercase())){
+                    lista.add(it)
+                }
+            }
+        }
+        return lista
     }
 }
