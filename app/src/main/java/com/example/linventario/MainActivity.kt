@@ -77,7 +77,7 @@ class MainActivity : AppCompatActivity() {
         datos["id_usuario"] = session.id.toString()
 
         val datos_toSend = JSONObject(datos as Map<String?, String?>)
-        val url = "http://192.168.0.7:8080/PSM/producto_inc.php"
+        val url = "https://linventario.000webhostapp.com/producto_inc.php"
 
         val jsonObjectRequest = JsonObjectRequest(
             Request.Method.PATCH, url, datos_toSend,
@@ -129,7 +129,7 @@ class MainActivity : AppCompatActivity() {
 
 
                 val datos_toSend = JSONObject(data as Map<String?, String?>)
-                val url = "http://192.168.0.7:8080/PSM/producto_inc.php"
+                val url = "https://linventario.000webhostapp.com/producto_inc.php"
 
                 val jsonObjectRequest = JsonObjectRequest(
                     Request.Method.POST, url, datos_toSend,
@@ -177,7 +177,7 @@ class MainActivity : AppCompatActivity() {
 
 
                 val datos_toSend = JSONObject(data as Map<String?, String?>)
-                val url = "http://192.168.0.7:8080/PSM/transaction_inc.php"
+                val url = "https://linventario.000webhostapp.com/transaction_inc.php"
 
                 val jsonObjectRequest = JsonObjectRequest(
                     Request.Method.POST, url, datos_toSend,

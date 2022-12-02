@@ -38,7 +38,7 @@ class LoginActivity : AppCompatActivity() {
 
                 val datos_toSend = JSONObject(data as Map<String?, String?>)
 
-                val url = "http://192.168.0.7:8080/PSM/login_inc.php"
+                val url = "https://linventario.000webhostapp.com/login_inc.php"
 
                 val jsonObjectRequest = JsonObjectRequest(
                     Request.Method.POST, url, datos_toSend,
@@ -127,7 +127,7 @@ class LoginActivity : AppCompatActivity() {
 
 
 
-        val url = "http://192.168.0.7:8080/PSM/productoGetAll.php"
+        val url = "https://linventario.000webhostapp.com/productoGetAll.php"
 
         val jsonArrayRequest = JsonArrayRequest(
             Request.Method.POST, url, data,
@@ -182,7 +182,7 @@ class LoginActivity : AppCompatActivity() {
 
         data.put(objeto)
 
-        val url = "http://192.168.0.7:8080/PSM/transaccionGetAll.php"
+        val url = "https://linventario.000webhostapp.com/transaccionGetAll.php"
 
         val jsonArrayRequest = JsonArrayRequest(
             Request.Method.POST, url, data,

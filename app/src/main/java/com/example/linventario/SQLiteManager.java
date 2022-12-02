@@ -452,7 +452,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
                     float precioVenta = result.getInt(3);
                     float precioCompra = result.getInt(4);
                     String descripcion = result.getString(5);
-                    boolean sincronizado = result.getInt(7) > 0;
+                    boolean sincronizado = result.getInt(6) > 0;
 
                     Producto producto = new Producto(id, cantidad, nombre, precioVenta, precioCompra, descripcion);
                     Producto.productoArrayList.add(producto);
