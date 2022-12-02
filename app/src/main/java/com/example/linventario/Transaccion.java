@@ -23,7 +23,7 @@ public class Transaccion {
         this.fecha = fecha;
     }
 
-    public Transaccion(int idTransaccion, String NombreProducto, boolean isEntrada, int cantidad, String observaciones, Date fecha){
+    public Transaccion(int idTransaccion, String NombreProducto, boolean isEntrada, int cantidad, String observaciones, String fecha){
         this.idTransaccion = idTransaccion;
         this.nombreProducto = NombreProducto;
         this.isEntrada = isEntrada;

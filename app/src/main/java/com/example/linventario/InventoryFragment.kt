@@ -78,7 +78,6 @@ class InventoryFragment : Fragment(), InventoryAdapter.OnProductListener, Search
             }else{
                 Toast.makeText(activity, "Para editar productos necesitas conexión a internet", Toast.LENGTH_SHORT).show()
             }
-
         }
 
         bind.swBusquedaProductos.setOnQueryTextListener(this)
@@ -151,21 +150,6 @@ class InventoryFragment : Fragment(), InventoryAdapter.OnProductListener, Search
         else
             Toast.makeText(activity, "No existe ningun producto", Toast.LENGTH_SHORT).show()
         return false
-
-        /*var listaTemporal = Producto.productoArrayList
-        val serchText = p0!!.lowercase(Locale.getDefault())
-
-        if(serchText.isNotEmpty()){
-            Producto.productoArrayList.clear()
-            listaTemporal.forEach{
-                if (it.nombre_producto.lowercase(Locale.getDefault()).contains(serchText)){
-                    Producto.productoArrayList.add(it)
-                }
-            }
-            recyclerView.adapter!!.notifyDataSetChanged()
-            Producto.productoArrayList.clear()
-            Producto.productoArrayList.addAll(listaTemporal)
-        }*/
     }
 
     private fun filtrado(porFiltrar : String) : ArrayList<Producto>{

@@ -9,10 +9,9 @@ import android.view.ViewGroup
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.example.linventario.databinding.FragmentInventoryBinding
 import com.example.linventario.databinding.FragmentTransactionsBinding
-import kotlinx.android.synthetic.main.fragment_transactions.*
 import java.util.*
+import kotlin.collections.ArrayList
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -62,6 +61,8 @@ class TransactionsFragment : Fragment(), TransaccionAdapter.OnProductListener, S
             Toast.makeText(activity, "Seleccione el elemento que desea eliminar", Toast.LENGTH_SHORT).show()
             eliminar = true;
         }
+
+        bind.searchTransacciones.setOnQueryTextListener(this)
         // Inflate the layout for this fragment
         return bind.root
     }
@@ -103,21 +104,34 @@ class TransactionsFragment : Fragment(), TransaccionAdapter.OnProductListener, S
         TODO("Not yet implemented")
     }
 
-    override fun onQueryTextChange(p0: String?): Boolean {
-        var listaTemporal = Transaccion.transaccionsArrayList
-        val serchText = p0!!.lowercase(Locale.getDefault())
+    override fun onQueryTextChange(p0: String): Boolean {
+        if(Transaccion.transaccionsArrayList.isNotEmpty()) {
+            var listaTransaccionesFiltrada = filtrado(p0)
 
-        if(serchText.isNotEmpty()){
-            Transaccion.transaccionsArrayList.clear()
-            listaTemporal.forEach{
-                if (it.codigoProducto.toString().contains(serchText)){
-                    Transaccion.transaccionsArrayList.add(it)
+            if(listaTransaccionesFiltrada.isNotEmpty()) {
+                adapterGlobal = TransaccionAdapter(listaTransaccionesFiltrada, this)
+            }
+            else{
+                adapterGlobal = TransaccionAdapter(Transaccion.transaccionsArrayList, this)
+                Toast.makeText(activity, "No se encontro ningun elemento con ese nombre", Toast.LENGTH_SHORT).show()
+            }
+            recyclerView.adapter = adapterGlobal
+        }
+        else
+            Toast.makeText(activity, "No existe ningun producto", Toast.LENGTH_SHORT).show()
+
+        return false
+    }
+
+    private fun filtrado(porFiltrar : String) : ArrayList<Transaccion>{
+        var lista = ArrayList<Transaccion>()
+        if(porFiltrar.isNotEmpty()){
+            Transaccion.transaccionsArrayList.forEach{
+                if (it.nombreProducto.lowercase(Locale.getDefault()).contains(porFiltrar.lowercase())){
+                    lista.add(it)
                 }
             }
-            recyclerView.adapter!!.notifyDataSetChanged()
-            Transaccion.transaccionsArrayList.clear()
-            Transaccion.transaccionsArrayList.addAll(listaTemporal)
         }
-        return false
+        return lista
     }
 }
