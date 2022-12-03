@@ -127,7 +127,7 @@ class LoginActivity : AppCompatActivity() {
 
 
 
-        val url = "https://linventario.000webhostapp.com/productoGetAll.php"
+        val url = "http://192.168.0.7:8080/PSM/productoGetAll.php"
 
         val jsonArrayRequest = JsonArrayRequest(
             Request.Method.POST, url, data,
