@@ -161,11 +161,11 @@ class newTransactionActivity : AppCompatActivity(), InventoryAdapter.OnProductLi
 
                         HttpsTrustManager.allowAllSSL()
                         queue.add(jsonObjectRequest)
-                    }else{
                         val intent = Intent (this, MainActivity::class.java)
                         intent.putExtra("fromTransaccion", true)
                         startActivity(intent)
                     }
+
 
 
 
