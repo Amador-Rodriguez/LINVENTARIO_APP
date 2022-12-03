@@ -303,6 +303,16 @@ public class SQLiteManager extends SQLiteOpenHelper {
         sqLiteDatabase.update(TABLE_NAME, contentValues, "codigo = ? AND idUsuario = ?", new String[]{Integer.toString(producto.getCodigo()), Integer.toString(sessionManager.getId()) });
     }
 
+    public void setNotSync(Producto producto){
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(ESTA_SINCRONIZADO, 0);
+
+        SessionManager sessionManager = SessionManager.getInstance();
+        sqLiteDatabase.update(TABLE_NAME, contentValues, "codigo = ? AND idUsuario = ?", new String[]{Integer.toString(producto.getCodigo()), Integer.toString(sessionManager.getId()) });
+    }
+
     public void setSyncTransaccion(Transaccion transaccion){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -436,6 +446,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
                     }
 
                     Transaccion transaccion = new Transaccion(id, nombreProducto, isEntrada, cantidad, observaciones, fecha);
+                    transaccion.setCodigoProducto(codigoProducto);
                     Transaccion.transaccionsArrayList.add(transaccion);
 
                     if(!sincronizado){
