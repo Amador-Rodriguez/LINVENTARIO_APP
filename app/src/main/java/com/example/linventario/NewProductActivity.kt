@@ -84,7 +84,7 @@ class NewProductActivity : AppCompatActivity() {
 
 
                 val datos_toSend = JSONObject(data as Map<String?, String?>)
-                val url = "https://linventario.000webhostapp.com/producto_inc.php"
+                val url = "http://192.168.0.7:8080/PSM/producto_inc.php"
 
                 val jsonObjectRequest = JsonObjectRequest(
                     Request.Method.PUT, url, datos_toSend,
